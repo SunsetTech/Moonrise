@@ -1,6 +1,6 @@
-local From = require"Toolbox.Import.Utils".From
-local Compose = From("Toolbox.Import",{"Compose"})
-local Module, Error = From("Toolbox.Utilities",{"Module","Error"})
+local From = require"Swansong.Import.Utils".From
+local Compose = From("Swansong.Import",{"Compose"})
+local Module, Error = From("Swansong.Tools",{"Module","Error"})
 local Package = {}
 
 local Enabled = false

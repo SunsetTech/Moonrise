@@ -1,11 +1,11 @@
 
 return {
-	DataStore = require"Toolbox.Import.DataStore";
-	Dependencies = require"Toolbox.Import.Dependencies";
-	Utils = require"Toolbox.Import.Utils";
-	Path = require"Toolbox.Import.Path";
-	Module = require"Toolbox.Import.Module";
-	Compose = require"Toolbox.Import.Compose";
-	Debug = require"Toolbox.Import.Debug";
-	Install = require"Toolbox.Import.Install";
+	DataStore = require"Swansong.Import.DataStore";
+	Dependencies = require"Swansong.Import.Dependencies";
+	Utils = require"Swansong.Import.Utils";
+	Path = require"Swansong.Import.Path";
+	Module = require"Swansong.Import.Module";
+	Compose = require"Swansong.Import.Compose";
+	Debug = require"Swansong.Import.Debug";
+	Install = require"Swansong.Import.Install";
 }

@@ -1,6 +1,6 @@
-local Module = require"Toolbox.Import.Module"
-local Path = require"Toolbox.Import.Path"
-local Compose = require"Toolbox.Import.Compose"
+local Module = require"Swansong.Import.Module"
+local Path = require"Swansong.Import.Path"
+local Compose = require"Swansong.Import.Compose"
 
 local Package = {}
 

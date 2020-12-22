@@ -1,6 +1,6 @@
 local lfs = require("lfs")
-local String = require("Toolbox.Utilities.String")
-local Array = require("Toolbox.Utilities.Array")
+local String = require("Swansong.Tools.String")
+local Array = require("Swansong.Tools.Array")
 
 local Package = {}
 
@@ -46,6 +46,7 @@ function Package.Join(ModuleNameParts)
 end
 
 function Package.ParentName(ModuleName)
+	print(ModuleName)
 	local ModuleNameParts = Package.Split(ModuleName)
 	if #ModuleNameParts == 1 then
 		return ""
