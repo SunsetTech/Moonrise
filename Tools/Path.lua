@@ -1,8 +1,8 @@
-local Import = require("Toolbox.Import.Utils")
+local Import = require("Moonrise.Import.Utils")
 
 local lfs = require"lfs"
 local posix = require"posix"
-local String,Array = Import.From("Toolbox.Utilities",{"String","Array"})
+local String,Array = Import.From("Moonrise.Tools",{"String","Array"})
 
 local Package = {}
 

@@ -1,4 +1,4 @@
-local Function = require"Toolbox.Tools.Function"
+local Function = require"Moonrise.Tools.Function"
 
 local Copy = {}
 

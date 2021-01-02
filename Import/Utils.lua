@@ -34,7 +34,6 @@ end
 
 function Package.Want(ModuleName)
 	local Success, ModuleOrError = pcall(require,ModuleName)
-	print(ModuleOrError)
 	return Success and ModuleOrError or nil
 end
 

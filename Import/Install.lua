@@ -1,6 +1,6 @@
-local Module = require"Swansong.Import.Module"
-local Path = require"Swansong.Import.Path"
-local Compose = require"Swansong.Import.Compose"
+local Module = require"Moonrise.Import.Module"
+local Path = require"Moonrise.Import.Path"
+local Compose = require"Moonrise.Import.Compose"
 
 local Package = {}
 
@@ -23,7 +23,6 @@ function Package.PathSystems()
 			Package.All()
 		else
 			require = Path.Require
-			print(require)
 		end
 		PathSystemsInstalled = true
 	end

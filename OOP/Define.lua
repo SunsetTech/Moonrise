@@ -1,4 +1,4 @@
-local Module = require"Toolbox.Import.Module"
+local Module = require"Moonrise.Import.Module"
 
 local Definition = Module.Sister"Declarator.Definition"
 local Linker = Module.Sister"Class.Linker"

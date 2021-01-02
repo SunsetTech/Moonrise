@@ -1,6 +1,6 @@
 local lfs = require"lfs"
-local From = require"Swansong.Import.Utils".From
-local Compose,DataStore = From("Swansong.Import",{"Compose","DataStore"});
+local From = require"Moonrise.Import.Utils".From
+local Compose,DataStore = From("Moonrise.Import",{"Compose","DataStore"});
 local Module,Path,Meta,Error = From("Toolbox.Utilities",{"Module","Path","Meta","Error"})
 
 local Package = {}

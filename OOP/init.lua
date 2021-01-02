@@ -1,4 +1,4 @@
-local Module = require"Toolbox.Import.Module"
+local Module = require"Moonrise.Import.Module"
 
 return {
 	Class = Module.Child"Class";

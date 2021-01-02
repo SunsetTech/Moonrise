@@ -1,11 +1,11 @@
 
 return {
-	DataStore = require"Swansong.Import.DataStore";
-	Dependencies = require"Swansong.Import.Dependencies";
-	Utils = require"Swansong.Import.Utils";
-	Path = require"Swansong.Import.Path";
-	Module = require"Swansong.Import.Module";
-	Compose = require"Swansong.Import.Compose";
-	Debug = require"Swansong.Import.Debug";
-	Install = require"Swansong.Import.Install";
+	DataStore = require"Moonrise.Import.DataStore";
+	Dependencies = require"Moonrise.Import.Dependencies";
+	Utils = require"Moonrise.Import.Utils";
+	Path = require"Moonrise.Import.Path";
+	Module = require"Moonrise.Import.Module";
+	Compose = require"Moonrise.Import.Compose";
+	Debug = require"Moonrise.Import.Debug";
+	Install = require"Moonrise.Import.Install";
 }

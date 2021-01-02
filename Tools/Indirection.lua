@@ -1,4 +1,4 @@
-local Meta = require("Toolbox.Utilities.Meta")
+local Meta = require("Moonrise.Tools.Meta")
 local Package = {}
 
 function Package.CreateProxy(Item)

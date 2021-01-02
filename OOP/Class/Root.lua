@@ -1,6 +1,6 @@
-local Module = require"Toolbox.Import.Module"
-local Tools = require"Toolbox.Tools"
---local Debug = require"Toolbox.Debug"
+local Module = require"Moonrise.Import.Module"
+local Tools = require"Moonrise.Tools"
+--local Debug = require"Moonrise.Debug"
 
 local Error = Tools.Error
 local String = Tools.String

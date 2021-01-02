@@ -1,5 +1,5 @@
-local Error = require"Toolbox.Tools.Error"
-local Module = require"Toolbox.Import.Module"
+local Error = require"Moonrise.Tools.Error"
+local Module = require"Moonrise.Import.Module"
 
 local Create = Module.Relative"Create"
 local Derive = Module.Relative"Derive"

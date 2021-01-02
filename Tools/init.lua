@@ -1,8 +1,8 @@
-local Import = require"Toolbox.Import"
+local Import = require"Moonrise.Import"
 
 
 return Import.Utils.ImportFrom(
-	"Toolbox.Tools",
+	"Moonrise.Tools",
 	{
 		"Math", "Table", "Array", "String", "Function", "VarArg", "Copy";
 		"Functional", "Iteration", "Indirection", "Env";

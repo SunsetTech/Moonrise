@@ -1,6 +1,6 @@
-local From = require"Swansong.Import.Utils".From
-local Compose = From("Swansong.Import",{"Compose"})
-local Module, Error = From("Swansong.Tools",{"Module","Error"})
+local From = require"Moonrise.Import.Utils".From
+local Compose = From("Moonrise.Import",{"Compose"})
+local Module, Error = From("Moonrise.Tools",{"Module","Error"})
 local Package = {}
 
 local Enabled = false

@@ -1,11 +1,11 @@
 local lfs = require"lfs"
 local posix = require"posix"
 
-local Iteration = require"Toolbox.Utilities.Iteration"
-local Path = require"Toolbox.Utilities.Path"
+local Iteration = require"Moonrise.Tools.Iteration"
+local Path = require"Moonrise.Tools.Path"
 
---local Debug = require"Toolbox.Debug"
---local DebugSink = Debug.Registry.Acquire"Toolbox.Utilities.Filesystem"
+--local Debug = require"Moonrise.Debug"
+--local DebugSink = Debug.Registry.Acquire"Moonrise.Tools.Filesystem"
 
 local Package = {}
 
