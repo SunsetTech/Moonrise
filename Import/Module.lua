@@ -1,5 +1,7 @@
+local lfs = require"lfs"
+
 local From = require"Moonrise.Import.Utils".From
-local Compose = From("Moonrise.Import",{"Compose"})
+local Compose, Path = From("Moonrise.Import",{"Compose", "Path"})
 local Module, Error = From("Moonrise.Tools",{"Module","Error"})
 local Package = {}
 
@@ -35,6 +37,15 @@ Package.Require = Compose.Pipeline{Package.Expose}
 function Package.Child(ModuleName)
 	assert(Enabled,"Not enabled")
 	return require(CurrentModule ..".".. ModuleName)
+end
+
+function Package.Root()
+	local Children = {}
+	local CurrentPath = Path.GetModuleDirectory()
+	
+	for Subpath in lfs.dir(CurrentPath) do
+		print(Subpath)
+	end
 end
 
 function Package.Sister(ModuleName)

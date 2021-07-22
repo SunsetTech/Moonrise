@@ -64,6 +64,7 @@ end
 end]]
 
 function Package.RealPath(Path)
+	assert(Path)
 	if posix then
 		return posix.realpath(Path)
 	else

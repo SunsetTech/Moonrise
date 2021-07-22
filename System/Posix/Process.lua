@@ -24,7 +24,7 @@ local Process; Process = {
 			Out = Process.Pipe();
 		}
 		
-		return Package.Fork(
+		return Process.Fork(
 			function(PID)
 				posix.close(Child.Out.Read)
 				posix.dup2(
@@ -38,29 +38,24 @@ local Process; Process = {
 					posix.fileno(io.stdout)
 				)
 				
-				posix.exec(
-					Program,
-					unpack(Arguments or {})
+				local Code = posix.execx(
+					{Program,
+						unpack(Arguments or {})
+					}
 				)
 				--never reached?
-				posix.close(Child.In.Read)
-				posix.close(Child.Out.Write)
-				
-				posix._exit(Code)
+				--[[posix.close(Child.In.Read)
+				posix.close(Child.Out.Write)]]
+				print("Exit Code", Code)
+				posix._exit(Code or 0)
 			end,
 			function(PID)
 				posix.close(Child.In.Read)
 				posix.close(Child.Out.Write)
-				return PID, Child.In.Write, Child.Out.Read
+				return PID, posix.fdopen(Child.In.Write,"w"), posix.fdopen(Child.Out.Read,"r")
 			end
 		)
 	end
-	
-	-[=[function Package.CallScriptFunction(ScriptPath,FunctionName,Arguments)
-		return os.execute(
-			([[source "%s"; %s %s]]):format(ScriptPath,FunctionName,table.concat(Arguments," "))
-		)
-	end]=]
 }
 
 return Process

@@ -19,12 +19,12 @@ end
 function Package.Copy(Function,Env,ShareUpvalues)
 	local Dump = string.dump(Function)
 	local Copy = load(Dump,"Copy","b")
-	if setfenv and Env then
-		setfenv(Copy, Env)
+	if debug.setfenv and Env then
+		debug.setfenv(Copy, Env)
 	end
 	for Index,Name,Value in Package.ForUpvalues(Function) do
 		local SetName = debug.getupvalue(Copy,Index)
-		if not setfenv and Env and Name == "_ENV" then
+		if not debug.setfenv and Env and Name == "_ENV" then
 			debug.setupvalue(Copy,Index,Env)
 		else
 			if ShareUpvalues then

@@ -25,8 +25,8 @@ function Package.SetEnv(Function,Env)
 				NonceFunction,1
 			)
 		end
-	elseif setfenv then
-		setfenv(Function, Env)
+	elseif debug.setfenv then
+		debug.setfenv(Function, Env)
 	end
 end
 
