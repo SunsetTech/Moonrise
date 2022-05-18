@@ -7,4 +7,6 @@ return {
 	Create = Module.Child"Create";
 	Define = Module.Child"Define";
 	Derive = Module.Child"Derive";
+	
+	Reflection = Module.Child"Reflection";
 }

@@ -43,9 +43,9 @@ function Package.Root()
 	local Children = {}
 	local CurrentPath = Path.GetModuleDirectory()
 	
-	for Subpath in lfs.dir(CurrentPath) do
+	--[[for Subpath in lfs.dir(CurrentPath) do
 		print(Subpath)
-	end
+	end]]
 end
 
 function Package.Sister(ModuleName)

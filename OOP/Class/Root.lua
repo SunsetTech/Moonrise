@@ -27,7 +27,7 @@ return Derive(
 		
 		__register = function(self, Instance, ID)
 			local InstanceInfo = {}
-			self.__instanceinfo[Instance] = InstanceInfo
+			--self.__instanceinfo[Instance] = InstanceInfo
 			InstanceInfo.ID = ID
 		end;
 		
@@ -95,7 +95,7 @@ return Derive(
 		end;
 		
 		__instanceinfo = function(_,_)
-			return {}
+			return setmetatable({}, {__mode="k"})
 		end;
 		
 		__tostring = function(_, Derived)
