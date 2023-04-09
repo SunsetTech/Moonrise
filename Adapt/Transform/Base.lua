@@ -6,12 +6,15 @@ local Base = OOP.Declarator.Shortcuts"Adapt.Element.Base"
 function Base:Initialize()
 end
 
-function Base:Left(Processor, ...)
-	error"<< not implemented"
-end
+Base.Join = function(ExecutionState, ...)
+		error":Join not implemented"
+	end
 
-function Base:Right(Processor, ...)
-	error">> not implemented"
-end
+
+Base.Split = function(ExecutionState, ...)
+		error":Split not implemented"
+	end
+
+
 
 return Base

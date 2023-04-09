@@ -1,6 +1,11 @@
-local Module = require"Moonrise.Import.Module"
 local Tools = require"Moonrise.Tools"
 
+--- @param Name string
+--- @param Inherits table
+--- @param Static table
+--- @param Dynamic table
+--- @param Linker fun(static: table, dynamic: table): table
+--- @return table
 return function(Name, Inherits, Static, Dynamic, Linker)
 	--[[Note: Precedence
 		1. Members defined in Static

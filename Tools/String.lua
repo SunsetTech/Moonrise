@@ -3,6 +3,7 @@ local l = require"lpeg"
 local Package = {}
 
 function Package.Explode(String,Divider) -- credit: http://richard.warburton.it
+	Divider = Divider or ""
 	if (Divider=='') then
 		local Results = {}
 		for I = 1, #String do

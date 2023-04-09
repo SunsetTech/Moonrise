@@ -1,10 +1,17 @@
 local Module = require"Moonrise.Import.Module"
 
-return {
-	Element = Module.Child"Element";
-	Language = Module.Child"Language";
-	Math = Module.Child"Math";
+local Adapt; Adapt = {
 	Stream = Module.Child"Stream";
-	Bubble = Module.Child"Bubble";
-	Processor = Module.Child"Processor";
-}
+	Transform = Module.Child"Transform";
+	Execution = Module.Child"Execution";
+	
+	Process = function(Node, MethodName, Buffer, ...)
+		local ExecutionState = Adapt.Execution.State(Buffer)
+		
+		return Adapt.Execution.Recurse(
+			ExecutionState, 
+			MethodName, "Root", 
+			Node, ...
+		)
+	end;
+}; return Adapt;

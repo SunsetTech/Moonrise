@@ -34,10 +34,14 @@ end
 
 Package.Require = Compose.Pipeline{Package.Expose}
 
+
+--- @param ModuleName string
+--- @return ...
 function Package.Child(ModuleName)
 	assert(Enabled,"Not enabled")
 	return require(CurrentModule ..".".. ModuleName)
 end
+
 
 function Package.Root()
 	local Children = {}
@@ -48,6 +52,9 @@ function Package.Root()
 	end]]
 end
 
+
+--- @param ModuleName string
+--- @return ...
 function Package.Sister(ModuleName)
 	assert(Enabled,"Not enabled")
 	local Parent = Module.ParentName(CurrentModule)
@@ -57,6 +64,7 @@ function Package.Sister(ModuleName)
 		return require(Parent ..".".. ModuleName)
 	end
 end
+
 
 function Package.Relative(ModuleName,Parent)
 	Error.CallerAssert(Enabled,"Not enabled")

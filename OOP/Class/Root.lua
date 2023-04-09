@@ -27,7 +27,7 @@ return Derive(
 		
 		__register = function(self, Instance, ID)
 			local InstanceInfo = {}
-			--self.__instanceinfo[Instance] = InstanceInfo
+			self.__instanceinfo[Instance] = InstanceInfo
 			InstanceInfo.ID = ID
 		end;
 		

@@ -1,14 +1,14 @@
 local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
-local Compound = OOP.Declarator.Shortcuts(
-	"Adapt.Element.Compound", {
+local Parent = OOP.Declarator.Shortcuts(
+	"Adapt.Element.Parent", {
 		Module.Sister"Base"
 	}
 )
 
-function Compound:Initialize(Instance, Children)
+function Parent:Initialize(Instance, Children)
 	Instance.Children = Children or {}
 end
 
-return Compound
+return Parent

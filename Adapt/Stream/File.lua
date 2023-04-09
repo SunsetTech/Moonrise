@@ -8,7 +8,9 @@ local File = OOP.Declarator.Shortcuts(
 )
 
 function File:Initialize(Instance, Path, Mode)
-	Instance.Handle = io.open(Path, Mode)
+	local Handle = io.open(Path, Mode)
+	assert(Handle)
+	Instance.Handle = Handle
 end
 
 function File:At()

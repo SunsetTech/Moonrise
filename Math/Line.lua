@@ -42,4 +42,16 @@ function Line:Intersection(With)
 	return Vec2D(X, Y)
 end
 
+function Line:Project(Over)
+	return Line(self.Start:Project(Over), self.End:Project(Over))
+end
+
+function Line:Closest(To)
+	return self.Start:Dist(To) <= self.End:Dist(To) and self.Start or self.End
+end
+
+function Line:Furthest(From)
+	return self.Start:Dist(From) >= self.End:Dist(From) and self.Start or self.End
+end
+
 return Line

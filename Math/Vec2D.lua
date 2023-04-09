@@ -23,6 +23,10 @@ function Vec2D:Dist(To)
 	return math.sqrt((To.X-self.X)^2 + (To.Y-self.Y)^2)
 end
 
+function Vec2D:Project(Over)
+	return Over:Add(Over:Sub(self))
+end
+
 function Vec2D:Magnitude()
 	return self:Dist(Vec2D())
 end
