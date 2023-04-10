@@ -1,12 +1,8 @@
-local Module = require"Moonrise.Import.Module"
-
-return {
-	Class = Module.Child"Class";
-	Declarator = Module.Child"Declarator";
-	
-	Create = Module.Child"Create";
-	Define = Module.Child"Define";
-	Derive = Module.Child"Derive";
-	
-	Reflection = Module.Child"Reflection";
-}
+local OOP; OOP = {
+	Class = require"Moonrise.OOP.Class";
+	Declarator = require"Moonrise.OOP.Declarator";
+	Create = require"Moonrise.OOP.Create";
+	Define = require"Moonrise.OOP.Define";
+	Derive = require"Moonrise.OOP.Derive";
+	Reflection = require"Moonrise.OOP.Reflection";
+}; return OOP;

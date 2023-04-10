@@ -1,9 +1,8 @@
-local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
 local String = OOP.Declarator.Shortcuts(
-	"Adapt.Element.String", {
-		Module.Sister"Base"
+	"Adapt.Transform.String", {
+		require"Moonrise.Adapt.Transform.Base"
 	}
 )
 

@@ -1,12 +1,9 @@
-
---- @treturn table
 local Module = require"Moonrise.Import.Module"
-local Tools = require"Moonrise.Tools"
-local Derive = Module.Relative"Derive"
-local Create = Module.Relative"Create"
+local Derive = require"Moonrise.OOP.Derive"
+local Create = require"Moonrise.OOP.Create"
 
 --- @vararg any
---- @return table
+--- @return table, string
 local function __instantiate(self, ...)
 	return Create(self)
 end

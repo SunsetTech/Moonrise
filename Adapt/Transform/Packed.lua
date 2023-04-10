@@ -1,14 +1,13 @@
-local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
 local Packed = OOP.Declarator.Shortcuts(
 	"Adapt.Transform.Packed", {
-		Module.Sister"Base"
+		require"Moonrise.Adapt.Transform.Base"
 	}
 )
 
-function Packed:Initialize(Instance, Packed)
-	Instance.Packed = Packed
+function Packed:Initialize(Instance, Format)
+	Instance.Format = Format
 end
 
 local function DropLast(Value, ...)
@@ -19,17 +18,17 @@ local function DropLast(Value, ...)
 	end
 end
 
-function Packed:Raise(Processor)
-	local PackSize = string.packsize(self.Packed)
+function Packed:Raise(ExecutionState)
+	local PackSize = string.packsize(self.Format)
 	
-	local Input = Processor:Read(PackSize)
+	local Input = ExecutionState:Read(PackSize)
 	
-	return true, DropLast(string.unpack(self.Packed, Input))
+	return true, {DropLast(string.unpack(self.Format, Input))}
 end
 
-function Packed:Lower(Processor, ...)
-	return true, Processor:Write(
-		string.pack(self.Packed, ...)
+function Packed:Lower(ExecutionState, ...)
+	return true, ExecutionState:Write(
+		string.pack(self.Format, ...)
 	)
 end
 

@@ -3,7 +3,8 @@ local Tools = require"Moonrise.Tools"
 local Error = Tools.Error
 local Derive = Module.Relative"Derive"
 
-return Module.Relative"Class.Factory"(
+---@class OOP.Declarator.Shortcuts
+local Shortcuts = Module.Relative"Class.Factory"(
 	Derive(
 		"OOP.Declarator.Shortcuts", {
 			Module.Sister"Definition"
@@ -35,3 +36,5 @@ return Module.Relative"Class.Factory"(
 		}
 	)
 )
+
+return Shortcuts

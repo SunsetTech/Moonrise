@@ -1,6 +1,4 @@
-local Module = require"Moonrise.Import.Module"
-
 return {
-	Base = Module.Child"Base";
-	File = Module.Child"File";
+	Base = require"Moonrise.Adapt.Stream.Base";
+	File = require"Moonrise.Adapt.Stream.File";
 }

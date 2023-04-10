@@ -1,11 +1,10 @@
-local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
-local Execution = Module.Relative"Execution"
+local Execution = require"Moonrise.Adapt.Execution"
 
 local Sequence = OOP.Declarator.Shortcuts(
 	"Adapt.Transform.Sequence", {
-		Module.Sister"Compound"
+		require"Moonrise.Adapt.Transform.Compound"
 	}
 )
 

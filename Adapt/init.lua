@@ -1,17 +1,6 @@
-local Module = require"Moonrise.Import.Module"
-
 local Adapt; Adapt = {
-	Stream = Module.Child"Stream";
-	Transform = Module.Child"Transform";
-	Execution = Module.Child"Execution";
-	
-	Process = function(Node, MethodName, Buffer, ...)
-		local ExecutionState = Adapt.Execution.State(Buffer)
-		
-		return Adapt.Execution.Recurse(
-			ExecutionState, 
-			MethodName, "Root", 
-			Node, ...
-		)
-	end;
+	Stream = require"Moonrise.Adapt.Stream";
+	Transform = require"Moonrise.Adapt.Transform";
+	Execution = require"Moonrise.Adapt.Execution";
+	Process = require"Moonrise.Adapt.Process";
 }; return Adapt;

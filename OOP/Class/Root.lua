@@ -67,7 +67,7 @@ return Derive(
 					end
 				end
 				
-				return Value or Unimplemented(tostring(LHS), Key)
+				return Value --or Unimplemented(tostring(LHS), Key)
 			end
 		end;
 		

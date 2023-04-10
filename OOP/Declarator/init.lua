@@ -1,6 +1,4 @@
-local Module = require"Moonrise.Import.Module"
-
 return {
-	Definition = Module.Child"Definition";
-	Shortcuts = Module.Child"Shortcuts";
+	Definition = require"Moonrise.OOP.Declarator.Definition";
+	Shortcuts = require"Moonrise.OOP.Declarator.Shortcuts";
 }

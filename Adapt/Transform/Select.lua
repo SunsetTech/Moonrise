@@ -1,34 +1,23 @@
----@class ExecutionState
----@field public Mark fun(self: ExecutionState): any
----@field public Rewind fun(self: ExecutionState, Bookmark: any): nil
-
-
-local Module = require"Moonrise.Import.Module"
----@type table
 local OOP = require"Moonrise.OOP"
 
----@type table
-local Execution = Module.Relative"Execution"
+local Execution = require"Moonrise.Adapt.Execution"
 
 ---@alias MethodName '"Raise"'|'"Lower"'
 
----@class Select
----@field public Children table
----@field public Raise fun(self: Select, ExecutionState: ExecutionState, ArgumentMap: table|nil): boolean, table|nil
----@field public Lower fun(self: Select, ExecutionState: ExecutionState, ArgumentMap: table|nil): boolean, table|nil
----@field private TryChildren fun(self: Select, ExecutionState: ExecutionState, MethodName: MethodName, ArgumentMap: table|nil): boolean, table|nil
+---@class Adapt.Transform.Select : Adapt.Transform.Compound
+---@operator call(): Adapt.Transform.Select
 Select = OOP.Declarator.Shortcuts(
 	"Adapt.Transform.Select", {
-		Module.Sister"Compound"
+		require"Moonrise.Adapt.Transform.Compound"
 	}
 )
 
----@param ExecutionState ExecutionState
+---@param ExecutionState Adapt.Execution.State
 ---@param MethodName MethodName
 ---@param Index number
 ---@param Child table
 ---@param Argument any
----@param Bookmark any
+---@param Bookmark table
 ---@return boolean, table|nil
 local function TryChild(ExecutionState, MethodName, Index, Child, Argument, Bookmark)
 	local Success, Result = Execution.Recurse(
@@ -45,7 +34,7 @@ local function TryChild(ExecutionState, MethodName, Index, Child, Argument, Book
 	end
 end
 
----@param ExecutionState ExecutionState
+---@param ExecutionState Adapt.Execution.State
 ---@param MethodName MethodName
 ---@param ArgumentMap table|nil
 ---@return boolean, table|nil
@@ -74,14 +63,14 @@ function Select:TryChildren(ExecutionState, MethodName, ArgumentMap)
 	end
 end
 
----@param ExecutionState ExecutionState
+---@param ExecutionState Adapt.Execution.State
 ---@param ArgumentMap table|nil
 ---@return boolean, table|nil
 function Select:Raise(ExecutionState, ArgumentMap)
 	return self:TryChildren(ExecutionState, "Raise", ArgumentMap)
 end
 
----@param ExecutionState ExecutionState
+---@param ExecutionState Adapt.Execution.State
 ---@param ArgumentMap table|nil
 ---@return boolean, table|nil
 function Select:Lower(ExecutionState, ArgumentMap)

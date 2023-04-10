@@ -1,5 +1,5 @@
 --- @param Definition table
---- @param Initializer table
+--- @param Initializer table|nil
 --- @return table, string
 local function Create(Definition, Initializer)
 	local Instance = Initializer or {}

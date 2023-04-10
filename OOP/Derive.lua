@@ -2,9 +2,9 @@ local Tools = require"Moonrise.Tools"
 
 --- @param Name string
 --- @param Inherits table
---- @param Static table
---- @param Dynamic table
---- @param Linker fun(static: table, dynamic: table): table
+--- @param Static table|nil
+--- @param Dynamic table|nil
+--- @param Linker (fun(static: table, dynamic: table|nil): table)|nil
 --- @return table
 return function(Name, Inherits, Static, Dynamic, Linker)
 	--[[Note: Precedence

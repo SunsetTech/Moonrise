@@ -1,12 +1,11 @@
 local Tools = {
 	String = require"Moonrise.Tools.String"
 }
-local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
 local Set = OOP.Declarator.Shortcuts(
-	"Adapt.Element.Set", {
-		Module.Sister"Base"
+	"Adapt.Transform.Set", {
+		require"Moonrise.Adapt.Transform.Base"
 	}
 )
 

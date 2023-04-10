@@ -1,11 +1,10 @@
-local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
 local Execution = require"Moonrise.Adapt.Execution"
 
 local Repeated = OOP.Declarator.Shortcuts(
-	"Adapt.Element.Repeated", {
-		Module.Sister"Base"
+	"Adapt.Transform.Repeated", {
+		require"Moonrise.Adapt.Transform.Base"
 	}
 )
 

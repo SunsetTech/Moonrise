@@ -1,8 +1,8 @@
 local Module = require"Moonrise.Import.Module"
 
-local Definition = Module.Sister"Declarator.Definition"
-local Linker = Module.Sister"Class.Linker"
-local Stash = Module.Sister"Class.Stash"
+local Definition = require"Moonrise.OOP.Declarator.Definition"
+local Linker = require"Moonrise.OOP.Class.Linker"
+local Stash = require"Moonrise.OOP.Class.Stash"
 
 return function(Name, Inherits, Static, Dynamic, Types)
 	Types = {
