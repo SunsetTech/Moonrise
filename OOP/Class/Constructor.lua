@@ -17,7 +17,7 @@ end
 --- @return table
 local function __new(self, ...)
 	local Instance = self:__instantiate(...)
-	self.__initialize(self, Instance, ...)
+	self.__initialize(self, Instance, ...) --not JIT optimizable?
 	return Instance
 end
 

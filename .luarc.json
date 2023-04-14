@@ -1,4 +1,6 @@
 {
     "workspace.checkThirdParty": false,
-    "completion.autoRequire": false
+    "diagnostics.globals": [
+        "err"
+    ]
 }

@@ -8,12 +8,12 @@ local OOP = require"Moonrise.OOP"
 
 local Execution = require"Moonrise.Adapt.Execution"
 
----@class Adapt.Transform.Jump : Adapt.Transform.Compound
+---@class Adapt.Transform.Jump : Adapt.Transform.Base
 ---@operator call:Adapt.Transform.Jump
 ---@field private SubPath table<integer, string>
 Jump = OOP.Declarator.Shortcuts(
 	"Adapt.Transform.Jump", {
-		require"Moonrise.Adapt.Transform.Compound"
+		require"Moonrise.Adapt.Transform.Base"
 	}
 )
 
@@ -27,13 +27,15 @@ end
 ---@param PathParts ExplodedString
 ---@return Adapt.Execution.Location | nil #the found nodes location
 local function Lookup(At, PathParts)
-	for Index, PathPart in pairs(PathParts) do
+	--for Index, PathPart in pairs(PathParts) do
+	for Index = 1, #PathParts do
+		local PathPart = PathParts[Index]
 		local Node = At.Node
 		---@cast Node Adapt.Transform.Compound
 		if Node.Children then
-			local FoundNode = Node.Children[PathPart]
-			if FoundNode then
-				At = Execution.Location(PathPart, FoundNode, Index > 1 and At or nil) --the weirdness here is so we dont attach to the chain for some reason i forget
+			local TargetNode = Node.Children[PathPart]
+			if TargetNode then
+				At = Execution.Location(PathPart, TargetNode, Index > 1 and At or nil) --the weirdness here is so we dont attach to the chain for some reason i forget
 				if Index > 1 then
 					table.insert(At.Parent.History, At)
 					--At.Parent:Push(At)
@@ -48,16 +50,18 @@ local function Lookup(At, PathParts)
 	return At
 end
 
+---@param At Adapt.Execution.Location
+---@param PathParts string[]
 ---@return Adapt.Execution.Location, Adapt.Execution.Location|nil
-local function BacktrackingFind(At, PathParts)
-	local Found
+local function Backtrack(At, PathParts)
+	local Target
 	repeat
-		Found = Lookup(At, PathParts)
-		if not Found then
+		Target = Lookup(At, PathParts)
+		if not Target then
 			At = At.Parent
 		end
-	until At == nil or Found
-	return At, Found
+	until At == nil or Target
+	return At, Target
 end
 
 local function FindRoot(Of)
@@ -68,31 +72,46 @@ local function FindRoot(Of)
 	end
 end
 
+---@param MethodName string
 ---@param CurrentState Adapt.Execution.State
-function Jump:Raise(CurrentState, Argument) --Root
-	local SubPath = String.Explode(self.SubPath, ".")
-	local Where,Found = BacktrackingFind(CurrentState.RootLocation:GetHead(), SubPath)
-	local RootOf = FindRoot(Found)
-
+---@param Argument any
+function Jump:Execute(MethodName, CurrentState, Argument) --Root
+	local Where, RootOf, Target
+	
+	if not CurrentState.JumpCache[self] then
+		local SubPath = String.Explode(self.SubPath, ".")
+		Where,Target = Backtrack(CurrentState.RootLocation:GetHead(), SubPath)
+		
+		if Target == nil then
+			error("Didn't find rule`".. self.SubPath .."` in grammar")
+		end
+		
+		RootOf = FindRoot(Target)
+		RootOf.Parent = Where
+		
+		CurrentState.JumpCache[self]={
+			Where = Where,
+			RootOf = RootOf,
+			Target = Target
+		}
+	else
+		local Cached = CurrentState.JumpCache[self]
+		Where, RootOf, Target = Cached.Where, Cached.RootOf, Cached.Target
+	end
+	
 	Where:PushLocation(RootOf)
-		local Node = Found.Node
-		local Success, Result = Found.Node:Raise(CurrentState, Argument)
+		local Success, Result = Execution.Execute(CurrentState, MethodName, Target, Argument)
 	Where:Pop(RootOf)
 	
 	return Success, Result
 end
 
----@param CurrentState Adapt.Execution.State
+function Jump:Raise(CurrentState, Argument)
+	return self:Execute("Raise", CurrentState, Argument)
+end
+
 function Jump:Lower(CurrentState, Argument) --Root
-	local SubPath = String.Explode(self.SubPath, ".")
-	local Where,Found = BacktrackingFind(CurrentState.RootLocation:GetHead(), SubPath)
-	local RootOf = FindRoot(Found)
-	
-	Where:PushLocation(RootOf)
-		local Success, Result = Found.Node:Lower(CurrentState, Argument)
-	Where:Pop(RootOf)
-	
-	return Success, Result
+	return self:Execute("Lower", CurrentState, Argument)
 end
 
 return Jump

@@ -35,7 +35,6 @@ function Base:Read(Count)
 end
 
 ---@param String string
----@return integer
 ---@diagnostic disable-next-line:unused-local
 function Base:Write(String)
 	---@diagnostic disable-next-line:missing-return

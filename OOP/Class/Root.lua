@@ -13,6 +13,34 @@ local Derive = Module.Relative"Derive"
 
 local Unimplemented = Module.Sister"Unimplemented"
 
+local function merge(stack,current)
+	for i = #current.__inherits, 1, -1 do
+		table.insert(stack, current.__inherits[i])
+	end
+
+end
+
+local function depth_first_search(root, key)
+	local stack = { root }
+
+	while #stack > 0 do
+		local current = table.remove(stack)
+
+		if current.__members and current.__members[key] then
+			return true, current.__members[key]
+		end
+
+		if current.__inherits then
+			merge(stack, current)
+			--[[for i = #current.__inherits, 1, -1 do
+				table.insert(stack, current.__inherits[i])
+			end]]
+		end
+	end
+
+	return false
+end
+
 return Derive(
 	"OOP.Class.Root", {
 		Module.Sister"Constructor"
@@ -39,13 +67,14 @@ return Derive(
 			return function(LHS, Key)
 				local Value = Derived.__members[Key]
 				
-				if type(Value) == "function" then
+				--[=[if type(Value) == "function" then
 					local TraceInfo = Derived.__trace
 					
-					if  TraceInfo.enabled
+					---@diagnostic disable-next-line:empty-block
+					if	TraceInfo.enabled
 					and (
-						   (TraceInfo.filter == "follow" and     TraceInfo.follow[Key])
-						or (TraceInfo.filter == "skip"   and not TraceInfo.skip  [Key])
+							 (TraceInfo.filter == "follow" and		 TraceInfo.follow[Key])
+						or (TraceInfo.filter == "skip"	 and not TraceInfo.skip	[Key])
 					) 
 					then
 						--[[return Debug.Wrap(
@@ -54,7 +83,7 @@ return Derive(
 							TraceInfo.Enter, TraceInfo.Exit
 						)]]
 					end
-				elseif type(Value) ~= "OOP.Class.Unimplemented" then
+				elseif type(Value) ~= "OOP.Class.Unimplemented" then]=]
 					local Inherits = Derived.__inherits
 					local Index, Length = 1, #Inherits
 					
@@ -62,10 +91,11 @@ return Derive(
 							 (Value == nil or type(Value) == "OOP.Class.Unimplemented")
 						and Index <= Length 
 					do
+
 						Value = Inherits[Index].__index(LHS, Key)
 						Index = Index + 1
 					end
-				end
+				--end
 				
 				return Value --or Unimplemented(tostring(LHS), Key)
 			end

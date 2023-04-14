@@ -1,0 +1,2 @@
+{LHS:a Op:+ RHS:{LHS:b, Op:+, RHS:c}}
+{{LHS:a Op:+ RHS:b}, Op:+, RHS:C}

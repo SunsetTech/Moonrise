@@ -1,3 +1,4 @@
+local Allocation = require"Moonrise.Adapt.Allocation"
 local OOP = require"Moonrise.OOP"
 
 ---@class Adapt.Execution.Location
@@ -12,10 +13,12 @@ local Location = OOP.Declarator.Shortcuts"Adapt.Execution.Location"
 ---@param Node Adapt.Execution.Location
 ---@param Parent Adapt.Execution.Location
 function Location:Initialize(Instance, Name, Node, Parent)
+	Allocation.Increment"Location"
 	Instance.Name=Name
-	assert(type(Name)=="string")
+	assert(type(Name)=="string" or print(Name))
 	Instance.Node=Node
 	Instance.Parent = Parent
+	Allocation.Increment"Location"
 	Instance.History = {}
 end
 
@@ -24,7 +27,7 @@ function Location:PushLocation(Where)
 end
 
 ---@param Name string
----@param Node Adapt.Execution.Location
+---@param Node Adapt.Transform.Base
 function Location:Push(Name, Node)
 	local Child = Location(Name, Node, self)
 	self:PushLocation(Child)
@@ -60,6 +63,14 @@ end
 function Location:ToPath(Debug)
 	local Latest = self:GetLatest()
 	return self.Name .. (Debug and ("(".. tostring(self.Node) ..")") or "") .. (Latest and (".".. Latest:ToPath(Debug)) or "")
+end
+
+function Location:ToPathFromParent()
+	if self.Parent then
+		return self.Parent:ToPathFromParent() ..".".. self.Name
+	else
+		return self.Name
+	end
 end
 
 return Location

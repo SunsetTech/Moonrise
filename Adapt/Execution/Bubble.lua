@@ -3,11 +3,6 @@ local OOP = require"Moonrise.OOP"
 
 ---@class Bubble
 ---@field public Values table
----@field public Initialize fun(self: Bubble, Instance: table, Values: table): nil
----@field public __call fun(self: Bubble): any
----@field public Form fun(First: any, ...: any): Bubble|any
----@field public Is fun(Value: any): boolean
----@field public Pop fun(Value: any): any
 ---@operator call(): Bubble
 local Bubble = OOP.Declarator.Shortcuts("Adapt.Execution.Bubble")
 
@@ -19,6 +14,11 @@ end
 
 function Bubble:__call()
     return table.unpack(self.Values)
+end
+
+function Bubble:__len()
+	print"???"
+	return #self.Values
 end
 
 ---@param First any

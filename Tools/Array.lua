@@ -1,18 +1,18 @@
-local Package = {}
+local Array = {}
 
-function Package.Last(In)
+function Array.Last(In)
 	return In[#In]
 end
 
-function Package.FindMatch(TableA,TableB,StartA,StartB)
+function Array.FindMatch(ArrayA,ArrayB,StartA,StartB)
 	StartA = StartA or 1
 	StartB = StartB or 1
 	local Match = {}
-	for AIndex = StartA,#TableA do
-		local AItem = TableA[AIndex]
-		local BItem = TableB[StartB+(AIndex-1)]
+	for AIndex = StartA,#ArrayA do
+		local AItem = ArrayA[AIndex]
+		local BItem = ArrayB[StartB+(AIndex-1)]
 		if (AItem == BItem) then
-			table.insert(Math,AItem)
+			table.insert(Match,AItem)
 		else
 			break
 		end
@@ -20,7 +20,7 @@ function Package.FindMatch(TableA,TableB,StartA,StartB)
 	return Match
 end
 
-function Package.FindSequence(In,What)
+function Array.FindSequence(In,What)
 	local Indexes = {}
 	local Stride = #What-1
 	if (#In >= #What) then
@@ -40,40 +40,50 @@ function Package.FindSequence(In,What)
 	return Indexes
 end
 
-function Package.Reverse(Table)
+---Constructs a new array which is the reverse of Source
+---@param Source table
+---@return table
+function Array.Reverse(Source)
 	local Result = {}
 	
-	for Index,Value in pairs(Table) do
+	for _,Value in pairs(Source) do
 		table.insert(Result,1,Value)
 	end
 	
 	return Result
 end
 
-function Package.Slice(Table,From,To)
+---comment
+---@param Source any[]
+---@param From integer
+---@param To integer
+---@return any[]
+function Array.Slice(Source,From,To)
 	From = From or 1
-	To = To or #Table
+	To = To or #Source
 
 	local Result = {}
 	
 	for i = From,To do
-		table.insert(Result,Table[i])
+		table.insert(Result,Source[i])
 	end
 	
 	return Result
 end
 
-function Package.Concat(Tables)
+---@param Sources any[][]
+---@return any[]
+function Array.Concat(Sources)
 	local Merged = {}
-	for _,Table in pairs(Tables) do
-		for _,Value in pairs(Table) do
+	for _,Source in pairs(Sources) do
+		for _,Value in pairs(Source) do
 			table.insert(Merged,Value)
 		end
 	end
 	return Merged
 end
 
-function Package.Zip(Zipper,Over,Iterator,State)
+function Array.Zip(Zipper,Over,Iterator,State)
 	repeat
 		State, Link = Iterator(State)
 		if Link then
@@ -83,4 +93,4 @@ function Package.Zip(Zipper,Over,Iterator,State)
 	return Over
 end
 
-return Package
+return Array

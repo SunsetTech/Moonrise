@@ -4,6 +4,7 @@ local OOP = require"Moonrise.OOP"
 local Execution = require"Moonrise.Adapt.Execution"
 
 ---@class Adapt.Transform.Grammar : Adapt.Transform.Compound
+---@operator call:Adapt.Transform.Grammar
 Grammar = OOP.Declarator.Shortcuts(
 	"Adapt.Transform.Grammar", {
 		require"Moonrise.Adapt.Transform.Compound"
@@ -16,11 +17,11 @@ function Grammar:Initialize(Instance, Children)
 end
 
 function Grammar:Raise(CurrentState, Argument) --Root
-	return Execution.Recurse(CurrentState, "Raise", "Root", self.Children[1], Argument)
+	return Execution.Recurse(CurrentState, "Raise", "1", self.Children[1], Argument)
 end
 
 function Grammar:Lower(CurrentState, Argument)
-	return Execution.Recurse(CurrentState, "Lower", "Root", self.Children[1], Argument)
+	return Execution.Recurse(CurrentState, "Lower", "1", self.Children[1], Argument)
 end
 
 return Grammar

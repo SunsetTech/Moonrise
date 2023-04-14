@@ -4,24 +4,27 @@ local OOP = require"Moonrise.OOP"
 ---@operator call(): Adapt.Transform.Base 
 local Base = OOP.Declarator.Shortcuts"Adapt.Transform.Base"
 
----@return nil
 function Base:Initialize()
 end
 
----@param ExecutionState Adapt.Execution.State
----@param ... any
+---@param CurrentState Adapt.Execution.State
+---@param Argument any
 ---@diagnostic disable-next-line:unused-local 
-function Base:Join(ExecutionState, ...) ---@diagnostic disable-line:unused-vararg
-	error":Join not implemented"
+function Base:Lower(CurrentState, Argument) ---@diagnostic disable-line:unused-vararg
+	error":Lower not implemented"
 end
 
----@param ExecutionState Adapt.Execution.State
----@param ... any
+---@param CurrentState Adapt.Execution.State
+---@param Argument any
 ---@diagnostic disable-next-line:unused-local
-function Base:Split(ExecutionState, ...) ---@diagnostic disable-line:unused-vararg
-	error":Split not implemented"
+function Base:Raise(CurrentState, Argument) ---@diagnostic disable-line:unused-vararg
+	error":Raise not implemented"
 end
 
-
+function Base:Optimize()
+	--print("Optimizing", self)
+	self.Raise = self.Raise
+	self.Lower = self.Lower
+end
 
 return Base

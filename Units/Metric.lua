@@ -25,8 +25,8 @@ Metric.Prefixes = {
 }
 
 function Metric.Convert(Value, From, To)
-	local From = From:lower()
-	local To = (To or ""):lower()
+	From = From:lower()
+	To = (To or ""):lower()
 	
 	local Factor = 10 ^ (Metric.Prefixes[From] - Metric.Prefixes[To])
 

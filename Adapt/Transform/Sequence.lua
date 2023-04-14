@@ -2,6 +2,7 @@ local OOP = require"Moonrise.OOP"
 
 local Execution = require"Moonrise.Adapt.Execution"
 
+---@class Adapt.Transform.Sequence : Adapt.Transform.Compound
 local Sequence = OOP.Declarator.Shortcuts(
 	"Adapt.Transform.Sequence", {
 		require"Moonrise.Adapt.Transform.Compound"
@@ -11,12 +12,13 @@ local Sequence = OOP.Declarator.Shortcuts(
 function Sequence:ExecuteChildren(ExecutionState, MethodName, Arguments)
 	local Results = {}
 	
-	for Index, Child in pairs(self.Children) do
+	for Index = 1, #self.Children do
+		local Child = self.Children[Index]
 		local Argument = Arguments[Index]
 		
 		local Success, Result = Execution.Recurse(
 			ExecutionState, 
-			MethodName, Index, Child, 
+			MethodName, tostring(Index), Child, 
 			Argument
 		)
 		

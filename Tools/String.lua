@@ -2,24 +2,35 @@ local l = require"lpeg"
 
 local Package = {}
 
-function Package.Explode(String,Divider) -- credit: http://richard.warburton.it
-	Divider = Divider or ""
-	if (Divider=='') then
-		local Results = {}
-		for I = 1, #String do
-			table.insert(Results,String:sub(I,I))
-		end
-		return Results
-	end
-	local Position = 0
-	local Results = {}
-	-- for each divider found
-	for StartPos,EndPos in function() return string.find(String,Divider,Position,true) end do
-		table.insert(Results,string.sub(String,Position,StartPos-1)) -- Attach chars left of current divider
-		Position = EndPos + 1 -- Jump past current divider
-	end
-	table.insert(Results,string.sub(String,Position)) -- Attach chars right of last divider
-	return Results
+local function findNextDivider(String, Divider, Position)
+	return string.find(String, Divider, Position, true)
+end
+
+function Package.Explode(String, Divider) -- credit: http://richard.warburton.it
+    Divider = Divider or ""
+    local Results = {}
+
+    if (Divider == '') then
+        for I = 1, #String do
+            table.insert(Results, String:sub(I, I))
+        end
+        return Results
+    end
+
+
+    local Position = 0
+
+    -- for each divider found
+    while true do
+        local StartPos, EndPos = findNextDivider(String, Divider, Position)
+        if StartPos == nil then break end
+
+        table.insert(Results, string.sub(String, Position, StartPos - 1)) -- Attach chars left of current divider
+        Position = EndPos + 1 -- Jump past current divider
+    end
+
+    table.insert(Results, string.sub(String, Position)) -- Attach chars right of last divider
+    return Results
 end
 
 Package.Split = Package.Explode

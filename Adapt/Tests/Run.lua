@@ -3,21 +3,30 @@ require"Moonrise.Import.Install".All()
 
 local Adapt = require"Moonrise.Adapt"
 local Transform = Adapt.Transform
-local           Repeated,           Select,           Sequence,           String 
-	= Transform.Repeated, Transform.Select, Transform.Sequence, Transform.String
 
-local Pattern = Transform.Grammar{
-	Transform.Grammar{Transform.Jump"A.Test"};
-	A = Transform.Grammar{ 
-		Test = Transform.String"Hello"
+Pattern = Transform.Sequence{
+	Transform.Grammar{
+		Delimiter = Transform.String'"';
+		Open = Transform.Jump"Delimiter";
+		Close = Transform.Jump"Delimiter";
+		Contents = Transform.Repeat(
+			0, Transform.Dematch(
+				Transform.Range(0,127),
+				Transform.Jump"Delimiter"
+			)
+		);
+		Transform.Sequence{
+			Transform.Jump"Delimiter";
+			Transform.Jump"Contents";
+			Transform.Jump"Delimiter";
+		}
 	};
+	Transform.Dematch(
+		Transform.Bytes(1), Transform.Bytes(2)
+	)
 }
 
-local ReadBuffer = Adapt.Stream.File("./Input", "r")
-local ReadSuccess, ReadResult = Adapt.Process(Pattern,"Raise",ReadBuffer)
-if ReadSuccess then
-	local WriteBuffer = Adapt.Stream.File("./Output", "w")
-	local WriteSuccess = Adapt.Process(Pattern,"Lower",WriteBuffer, ReadResult)
-	
-	print(WriteSuccess and "Success" or "Failure")
-end
+local ReadBuffer = Adapt.Stream.File("./Input", "rb")
+local WriteBuffer = Adapt.Stream.File("./Output", "wb")
+print(Adapt.Copy(Pattern, ReadBuffer, WriteBuffer))
+
