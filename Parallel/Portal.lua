@@ -5,7 +5,6 @@ local Tools = {
 	Table = require"Moonrise.Tools.Table"
 }
 
-local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
 local Time = require"Moonrise.System.Posix.Time"

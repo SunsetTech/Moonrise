@@ -1,10 +1,9 @@
 local cqueues = require"cqueues"
-local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
 local Pool = OOP.Declarator.Shortcuts(
 	"Threading.Pool", {
-		Module.Sister"Routine"
+		require"Moonrise.Parallel.Routine"
 	}
 )
 

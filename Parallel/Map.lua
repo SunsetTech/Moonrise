@@ -1,7 +1,6 @@
-local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
-local Portal = Module.Sister"Portal"
+local Portal = require"Moonrise.Parallel.Portal"
 
 local Map = OOP.Declarator.Shortcuts"Parallel.Map"
 

@@ -1,8 +1,6 @@
-local Module = require"Moonrise.Import.Module"
-
 return {
-	Pool = Module.Child"Pool";
-	Portal = Module.Child"Portal";
-	Routine = Module.Child"Routine";
-	Synchronized = Module.Child"Synchronized";
+	Pool = require"Moonrise.Parallel.Pool";
+	Portal = require"Moonrise.Parallel.Portal";
+	Routine = require"Moonrise.Parallel.Routine";
+	Synchronized = require"Moonrise.Parallel.Synchronized";
 }

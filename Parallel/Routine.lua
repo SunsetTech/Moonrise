@@ -1,4 +1,3 @@
-local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
 local Routine = OOP.Declarator.Shortcuts"Threading.Routine"
