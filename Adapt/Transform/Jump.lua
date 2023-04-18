@@ -114,5 +114,14 @@ function Jump:Lower(CurrentState, Argument) --Root
 	return self:Execute("Lower", CurrentState, Argument)
 end
 
+function Jump:Optimize()
+	Jump.Parents.Base.Optimize(self)
+	self.Execute = Jump.Execute
+end
+
+function Jump:__tostring()
+	return "Goto: ".. self.SubPath
+end
+
 return Jump
 

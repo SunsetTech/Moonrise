@@ -42,4 +42,9 @@ function Sequence:Lower(ExecutionState, Arguments)
 	return self:ExecuteChildren(ExecutionState, "Lower", Arguments)
 end
 
+function Sequence:Optimize()
+	Sequence.Parents.Compound.Optimize(self)
+	self.ExecuteChildren = Sequence.ExecuteChildren
+end
+
 return Sequence

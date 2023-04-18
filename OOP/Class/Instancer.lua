@@ -2,6 +2,7 @@ local Module = require"Moonrise.Import.Module"
 
 local Derive = Module.Relative"Derive"
 
+--Defines a metatable that links calls to __new
 return Derive(
 	"OOP.Class.Instancer", {
 		Module.Sister"RTTI"

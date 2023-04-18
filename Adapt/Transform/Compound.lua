@@ -19,7 +19,6 @@ function Compound:Optimize()
 	Compound.Parents.Base.Optimize(self)
 	if not self.Children then print"???" end
 	for _, Child in pairs(self.Children or {}) do ---who?
-		print(Child)
 		Child:Optimize()
 	end
 end

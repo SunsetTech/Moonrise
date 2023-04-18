@@ -9,6 +9,7 @@ local Process = function(Node, MethodName, Buffer, Argument, Debug)
 	--only users should only use this
 	--module internals should use Recurse
 	local ProgramState = Execution.State(Buffer, Debug)
+	ProgramState:Optimize()
 	ProgramState.Mark = ProgramState.Mark
 	local Success, Result = Execution.Recurse(
 		ProgramState, 

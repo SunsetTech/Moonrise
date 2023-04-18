@@ -13,34 +13,6 @@ local Derive = Module.Relative"Derive"
 
 local Unimplemented = Module.Sister"Unimplemented"
 
-local function merge(stack,current)
-	for i = #current.__inherits, 1, -1 do
-		table.insert(stack, current.__inherits[i])
-	end
-
-end
-
-local function depth_first_search(root, key)
-	local stack = { root }
-
-	while #stack > 0 do
-		local current = table.remove(stack)
-
-		if current.__members and current.__members[key] then
-			return true, current.__members[key]
-		end
-
-		if current.__inherits then
-			merge(stack, current)
-			--[[for i = #current.__inherits, 1, -1 do
-				table.insert(stack, current.__inherits[i])
-			end]]
-		end
-	end
-
-	return false
-end
-
 return Derive(
 	"OOP.Class.Root", {
 		Module.Sister"Constructor"

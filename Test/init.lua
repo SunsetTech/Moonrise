@@ -49,7 +49,7 @@ end
 function Test.Pass() return true  end
 function Test.Fail() return false end
 
-Test.Print(
+--[[Test.Print(
 	Test.Series(
 		"All", {
 			Test.Series(
@@ -72,6 +72,6 @@ Test.Print(
 			)
 		}
 	)()
-)
+)]]
 
 return Test

@@ -19,18 +19,17 @@ function Atmost:Initialize(Instance, Amount, Pattern)
 	Instance.Pattern = Pattern
 end
 
-function Atmost:Lower(CurrentState, Argument)
-	if Execution.Bubble.Is(Argument) then
-		local Arguments = Argument.Values
+function Atmost:Lower(CurrentState, Arguments)
+	if Execution.Bubble.Is(Arguments) then
 		if #Arguments <= self.Amount then
-			local Results = {}
+			local Results = Execution.Bubble.Form()
 			
 			local Success
-			for _, _Argument in pairs(Arguments) do
+			for _, Argument in pairs(Arguments) do
 				local Result
 				Success, Result = Execution.Recurse(
 					CurrentState,
-					"Lower", "Pattern", self.Children.Pattern, _Argument
+					"Lower", "Pattern", self.Children.Pattern, Argument
 				)
 				if Success then
 					table.insert(Results, Result)
@@ -38,7 +37,7 @@ function Atmost:Lower(CurrentState, Argument)
 					error"oh no"
 				end
 			end
-			Results = Execution.Bubble(Results)
+			
 			return true, Results
 		else
 			return false
@@ -52,7 +51,7 @@ function Atmost:Raise(CurrentState, Argument)
 	if Execution.Bubble.Is(Argument) then --TODO bubble->bubble args version
 		error"help"
 	else --single->bubble
-		local Results = {}
+		local Results = Execution.Bubble.Form()
 		for _ = 1, self.Amount do
 			local Bookmark = CurrentState:Mark()
 			local Success, Result = Execution.Recurse(
@@ -66,7 +65,6 @@ function Atmost:Raise(CurrentState, Argument)
 				break
 			end
 		end
-		Results = Execution.Bubble(Results)
 		return true, Results
 	end
 end

@@ -16,6 +16,12 @@ function File:Initialize(Instance, Path, Mode)
 	local Handle = io.open(Path, Mode)
 	assert(Handle)
 	Instance.Handle = Handle
+	Instance.At = File.At
+	Instance.Seek = File.Seek
+	Instance.Goto = File.Goto
+	Instance.Size = File.Size
+	Instance.Read = File.Read
+	Instance.Write = File.Write
 end
 
 ---@return integer

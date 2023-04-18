@@ -28,4 +28,8 @@ function String:Raise(CurrentState)
 	return Input == self.Bytes, Input
 end
 
+function String:__tostring()
+	return "String'".. self.Bytes .."'"
+end
+
 return String

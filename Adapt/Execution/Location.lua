@@ -1,5 +1,10 @@
-local Allocation = require"Moonrise.Adapt.Allocation"
 local OOP = require"Moonrise.OOP"
+
+local _LocationAllocator
+function LocationAllocator()
+	_LocationAllocator = _LocationAllocator or require"Moonrise.Adapt.Optimization.LocationAllocator"
+	return _LocationAllocator
+end
 
 ---@class Adapt.Execution.Location
 ---@operator call:Adapt.Execution.Location
@@ -8,28 +13,37 @@ local OOP = require"Moonrise.OOP"
 ---@field Parent Adapt.Execution.Location
 ---@field History table<integer, Adapt.Execution.Location>
 local Location = OOP.Declarator.Shortcuts"Adapt.Execution.Location"
-
 ---@param Name string
 ---@param Node Adapt.Execution.Location
 ---@param Parent Adapt.Execution.Location
 function Location:Initialize(Instance, Name, Node, Parent)
-	Allocation.Increment"Location"
+	LocationAllocator().Harf()
 	Instance.Name=Name
 	assert(type(Name)=="string" or print(Name))
 	Instance.Node=Node
 	Instance.Parent = Parent
-	Allocation.Increment"Location"
 	Instance.History = {}
+	Instance:Optimize()
+end
+
+function Location:Optimize()
+	self.PushLocation = Location.PushLocation
+	self.Push = Location.Push
+	self.Pop = Location.Pop
+	self.GetHead = Location.GetHead
+	self.ToPath = Location.ToPath
+	self.GetLatest = Location.GetLatest
 end
 
 function Location:PushLocation(Where)
 	table.insert(self.History, Where)
 end
 
+
 ---@param Name string
 ---@param Node Adapt.Transform.Base
 function Location:Push(Name, Node)
-	local Child = Location(Name, Node, self)
+	local Child = LocationAllocator().Allocate(Name, Node, self)
 	self:PushLocation(Child)
 	return Child
 end

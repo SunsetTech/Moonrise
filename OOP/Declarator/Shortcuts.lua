@@ -1,7 +1,7 @@
 local Module = require"Moonrise.Import.Module"
 local Tools = require"Moonrise.Tools"
 local Error = Tools.Error
-local Derive = Module.Relative"Derive"
+local Derive = require"Moonrise.OOP.Derive"
 
 ---@class OOP.Declarator.Shortcuts
 local Shortcuts = Module.Relative"Class.Factory"(

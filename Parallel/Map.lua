@@ -2,6 +2,9 @@ local OOP = require"Moonrise.OOP"
 
 local Portal = require"Moonrise.Parallel.Portal"
 
+---@class Parallel.Map
+---@operator call:Parallel.Map
+---@field Channel Parallel.Portal
 local Map = OOP.Declarator.Shortcuts"Parallel.Map"
 
 function Map:Initialize(Instance, Channel)

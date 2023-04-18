@@ -19,18 +19,17 @@ function Atleast:Initialize(Instance, Amount, Pattern)
 	Instance.Pattern = Pattern
 end
 
-function Atleast:Lower(CurrentState, Argument)
-	if Execution.Bubble.Is(Argument) then
-		local Arguments = Argument.Values
+function Atleast:Lower(CurrentState, Arguments)
+	if Execution.Bubble.Is(Arguments) then
 		assert(#Arguments >= self.Amount)
-		local Results = {}
+		local Results = Execution.Bubble.Form()
 		
 		local Success
-		for _, _Argument in pairs(Arguments) do
+		for _, Argument in pairs(Arguments) do
 			local Result
 			Success, Result = Execution.Recurse(
 				CurrentState,
-				"Lower", "Pattern", self.Children.Pattern, _Argument
+				"Lower", "Pattern", self.Children.Pattern, Argument
 			)
 			if Success then
 				table.insert(Results, Result)
@@ -38,7 +37,6 @@ function Atleast:Lower(CurrentState, Argument)
 				error"oh no"
 			end
 		end
-		Results = Execution.Bubble(Results)
 		return true, Results
 	else
 		error"Must be a bubble"
@@ -50,7 +48,7 @@ function Atleast:Raise(CurrentState, Argument)
 		error"help"
 	else -- single->bubble
 		local Success, Bookmark
-		local Results = {}
+		local Results = Execution.Bubble.Form()
 		repeat
 			Bookmark = CurrentState:Mark()
 			local Result
@@ -63,7 +61,7 @@ function Atleast:Raise(CurrentState, Argument)
 			end
 		until not Success
 		CurrentState:Rewind(Bookmark)
-		return #Results >= self.Amount, #Results >= self.Amount and Execution.Bubble(Results) or nil
+		return #Results >= self.Amount, #Results >= self.Amount and Results or nil
 	end
 end
 

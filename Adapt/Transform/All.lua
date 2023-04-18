@@ -18,22 +18,19 @@ local All = OOP.Declarator.Shortcuts(
 function All:Initialize(Instance, Pattern)
 		---@diagnostic disable-next-line:undefined-field
 		All.Parents.Compound:Initialize(Instance, {Pattern = Pattern})
-	Instance.Pattern = Pattern
 end
 
-function All:Lower(CurrentState, Argument)
-	if Execution.Bubble.Is(Argument) then --bubble->bubble
-		local Arguments = Argument.Values
-		local Results = {}
+function All:Lower(CurrentState, Arguments)
+	if Execution.Bubble.Is(Arguments) then --bubble->bubble
+		local Results = Execution.Bubble.Form()
 		
 		local Success
 		for Index = 1, #Arguments do
-			local _Argument = Arguments[Index]
-		--for _, _Argument in pairs(Arguments) do
+			local Argument = Arguments[Index]
 			local Result
 			Success, Result = Execution.Recurse(
 				CurrentState,
-				"Lower", "Pattern", self.Children.Pattern, _Argument
+				"Lower", "Pattern", self.Children.Pattern, Argument
 			)
 			if Success then
 				table.insert(Results, Result)
@@ -41,7 +38,6 @@ function All:Lower(CurrentState, Argument)
 				error"oh no"
 			end
 		end
-		Results = Execution.Bubble(Results)
 		return true, Results
 	else
 		error"Must be a bubble"
@@ -53,7 +49,7 @@ function All:Raise(CurrentState, Argument)
 		error"help"
 	else -- single->bubble
 		local Success, Bookmark
-		local Results = {}
+		local Results = Execution.Bubble.Form()
 		repeat
 			if Bookmark then 
 				CurrentState:ClearMark(Bookmark)
@@ -69,7 +65,6 @@ function All:Raise(CurrentState, Argument)
 			end
 		until not Success
 		CurrentState:Rewind(Bookmark)
-		Results = Execution.Bubble(Results)
 		return true, Results
 	end
 end

@@ -1,6 +1,6 @@
 local OOP = require"Moonrise.OOP"
-local Allocation = require"Moonrise.Adapt.Allocation"
 local Location = require"Moonrise.Adapt.Execution.Location"
+local LocationAllocator = require"Moonrise.Adapt.Optimization.LocationAllocator"
 
 ---@class Bookmark
 ---@field At integer
@@ -15,17 +15,19 @@ local Location = require"Moonrise.Adapt.Execution.Location"
 ---@field private IsInVariableNames table
 ---@field private VariableNames string[]
 ---@field public JumpCache table
+---@field public RaiseCache table
 local State = OOP.Declarator.Shortcuts"Moonrise.Adapt.Execution.State"
 
 ---@param Instance Adapt.Execution.State
 ---@param Buffer Adapt.Stream.Base
 function State:Initialize(Instance, Buffer, Debug) --TODO registers
 	Instance.Buffer = Buffer
-	Instance.Debug = Debug
+	Instance.Debug = Debug or false
 	Instance.Variables = {}
 	Instance.IsInVariableNames = {}
 	Instance.VariableNames = {}
 	Instance.JumpCache = {}
+	Instance.RaiseCache = {}
 end
 
 ---comment
@@ -51,7 +53,7 @@ end
 ---@return Adapt.Execution.Location #the location for the pushed
 function State:AppendLocation(Name, Node)
 	if self.RootLocation == nil then
-		self.RootLocation = Location(Name, Node)
+		self.RootLocation = LocationAllocator.Allocate(Name, Node)
 		return self.RootLocation
 	else
 		local Head = self.RootLocation:GetHead()
@@ -128,6 +130,18 @@ end
 ---@param String string
 function State:Write(String)
 	self.Buffer:Write(String)
+end
+
+function State:Optimize()
+	self.Write = State.Write
+	self.Read = State.Read
+	self.Peek = State.Peek
+	self.Rewind = State.Rewind
+	self.Mark = State.Mark
+	self.CopyVariables = State.CopyVariables
+	self.RestoreVariables = State.RestoreVariables
+	self.ClearMark = State.ClearMark
+	self.AppendLocation = State.AppendLocation
 end
 
 return State

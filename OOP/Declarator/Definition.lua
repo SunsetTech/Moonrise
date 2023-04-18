@@ -1,29 +1,29 @@
 local Module = require"Moonrise.Import.Module"
 local Tools = require"Moonrise.Tools"
 
-local Create = Module.Relative"Create"
-local Derive = Module.Relative"Derive"
-local Root = Module.Relative"Class.Root"
-local Linker = Module.Relative"Class.Linker"
+local Create = require"Moonrise.OOP.Create"
+local Derive = require"Moonrise.OOP.Derive"
+local Root = require"Moonrise.OOP.Class.Root"
+local Linker = require"Moonrise.OOP.Class.Linker"
+local Factory = require"Moonrise.OOP.Class.Factory"
+local Constructor = require"Moonrise.OOP.Class.Constructor"
 
-return Module.Relative"Class.Factory"(
+return Factory(
 	Derive(
-		"OOP.Declarator.Definition", {
-			Module.Relative"Class.Factory";
-			Module.Relative"Class.Constructor";
-		},
+		"OOP.Declarator.Definition", {Factory, Constructor},
 		{
 			__instantiate = function(self, Name, Inherits, Static, Dynamic, Link)
 				Inherits = Inherits or {Root}
 				Tools.Error.CallerAssert(type(Inherits) == "table" and #Inherits > 0, "Must have a base class")
 				
-				return Create(
+				local Obj = Create(
 					self,
 					Derive(
 						Name, Inherits,
 						Static, Dynamic, Link or Linker
 					)
 				)
+				return Obj
 			end;
 			
 			__index = function()

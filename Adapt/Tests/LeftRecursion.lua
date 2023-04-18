@@ -1,14 +1,3 @@
-local function TableToString(t, indent, seen)
-	local Parts = {}
-	for _,V in pairs(t) do
-		if type(V) == "table" then
-			table.insert(Parts, _ ..": ".. TableToString(V))
-		else
-			table.insert(Parts, _ ..": ".. tostring(V))
-		end
-	end
-	return "{"..table.concat(Parts,", ").."}"
-end
 
 local function ComputeStack(Table, Reverse)
 	local ValueIndex, NextIndex = "LHS", "RHS"
@@ -82,7 +71,7 @@ local Adapt = require"Moonrise.Adapt"
 local TF = Adapt.Transform
 
 Raise = {
-	SequenceToAST = function(Recurse, Argument)
+	Expression = function(Recurse, Argument)
 		local Success, Result = Recurse(Argument)
 		if Result then
 			Result = {LHS = Result[1], Op = Result[2], RHS = Result[3]}
@@ -93,26 +82,22 @@ Raise = {
 		local Success, Result = Recurse(Argument)
 		return Success, Success and RightToLeft(Result)
 	end;
-	SelectToAST = function(Recurse, Argument)
+	RHS = function(Recurse, Argument)
 		local Success, Result = Recurse(Argument)
 		return Success, Result[Result.__which]
 	end;
 }
 
 Lower = {
-	SequenceToAST = function(Recurse, Argument)
+	Expression = function(Recurse, Argument)
 		--print(TableToString(Argument))
-		local Arg = {
-			Argument.LHS,
-			Argument.Op,
-			Argument.RHS
-		}
+		local Arg = { Argument.LHS, Argument.Op, Argument.RHS }
 		return Recurse(Arg)
 	end;
 	Invert = function (Recurse,Argument)
 		return Recurse(LeftToRight(Argument))
 	end;
-	SelectToAST = function(Recurse, Argument)
+	RHS = function(Recurse, Argument)
 		if (type(Argument) == "table") then
 			Argument = {[1]=Argument, __which=1}
 		else
@@ -130,7 +115,7 @@ Pattern = TF.Grammar{--TODO handle not an operation case?
 				TF.Jump"Test",
 				TF.Jump"Character"	
 			}
-		),Raise.SelectToAST, Lower.SelectToAST
+		),Raise.RHS, Lower.RHS
 	);
 	Test = TF.Filter(
 		TF.Sequence{
@@ -138,7 +123,7 @@ Pattern = TF.Grammar{--TODO handle not an operation case?
 			TF.String"+",
 			TF.Jump"RHS"
 		},
-		Raise.SequenceToAST, Lower.SequenceToAST
+		Raise.Expression, Lower.Expression
 	);
 	TF.Select{
 		TF.Filter(

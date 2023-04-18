@@ -43,5 +43,10 @@ function Dematch:Lower(CurrentState, Argument)
 	return self:Recurse("Lower", CurrentState, Argument)
 end
 
+function Dematch:Optimize()
+		Dematch.Parents.Compound.Optimize(self)
+	self.Recurse = Dematch.Recurse
+end
+
 return Dematch
 

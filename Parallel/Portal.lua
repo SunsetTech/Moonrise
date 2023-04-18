@@ -9,8 +9,13 @@ local OOP = require"Moonrise.OOP"
 
 local Time = require"Moonrise.System.Posix.Time"
 
+---@class Parallel.Portal
+---@operator call:Parallel.Portal
+---@field Window userdata
 local Portal = OOP.Declarator.Shortcuts"Parallel.Portal"
 
+---@param Instance Parallel.Portal
+---@param Window userdata
 function Portal:Initialize(Instance, Window)
 	Instance.Window = Window or lanes.linda()
 end

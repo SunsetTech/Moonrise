@@ -41,7 +41,7 @@ function Select:TryChildren(CurrentState, MethodName, ArgumentMap)
 	ArgumentMap = ArgumentMap or {}
 	local Bookmark = CurrentState:Mark()
 	if MethodName == "Lower" then
-		assert(ArgumentMap.__which ~= nil)
+		--assert(ArgumentMap.__which ~= nil)
 	end
 	if (ArgumentMap.__which) then --the user or a previous parse indicated which branch to take
 		local Index = ArgumentMap.__which
@@ -54,7 +54,6 @@ function Select:TryChildren(CurrentState, MethodName, ArgumentMap)
 			return false
 		end
 	else --gotta try 'em all, Parsemon
-		print(self.Children)
 		for Index,Child in pairs(self.Children) do
 			local Argument = ArgumentMap[Index]
 			local Success, Result = TryChild(CurrentState, MethodName, Index, Child, Argument, Bookmark)
@@ -77,7 +76,7 @@ end
 ---@param ArgumentMap table|nil
 ---@return boolean, table|nil
 function Select:Lower(CurrentState, ArgumentMap)
-	print(ArgumentMap.__which)
+	--print(ArgumentMap.__which)
 	return self:TryChildren(CurrentState, "Lower", ArgumentMap)
 end
 
