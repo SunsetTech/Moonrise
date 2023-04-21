@@ -5,7 +5,7 @@ local Posix = {}
 function Posix.Fork(ChildProcessFunction,ParentProcessFunction)
 	local ChildPID = posix.fork()
 	if (ChildPID == 0) then
-		return ChildProcessFunction(ChildPID)
+		return ChildProcessFunction()
 	else
 		return ParentProcessFunction(ChildPID)
 	end
@@ -28,7 +28,7 @@ function Posix.BidirectionalOpen(Program,Arguments)
 	local InputPipeR, InputPipeW = posix.pipe()
 	local OutputPipeR, OutputPipeW = posix.pipe()
 	return Posix.Fork(
-		function(PID)
+		function()
 			posix.close(InputPipeW)
 			posix.close(OutputPipeR)
 			posix.dup2(InputPipeR,posix.fileno(io.stdin))
@@ -38,10 +38,10 @@ function Posix.BidirectionalOpen(Program,Arguments)
 			posix.close(OutputPipeW)
 			posix._exit(0)
 		end,
-		function(PID)
+		function(ChildPID)
 			posix.close(InputPipeR)
 			posix.close(OutputPipeW)
-			return PID,InputPipeW,OutputPipeR
+			return ChildPID,InputPipeW,OutputPipeR
 		end
 	)
 end

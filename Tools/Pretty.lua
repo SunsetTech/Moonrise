@@ -9,7 +9,7 @@ local Pretty; Pretty = { --TODO this could be an Adapt grammar
 	---@param IndentAmount integer | nil
 	---@param SeenCache table<table, boolean> | nil
 	---@return string
-	Table = function(Source, IndentPerLevel, Multiline, IndentAmount, SeenCache)
+	Table = function(Source, Multiline, IndentPerLevel, IndentAmount, SeenCache)
 		IndentAmount = IndentAmount or 0
 		IndentPerLevel = IndentPerLevel or 0
 		SeenCache = SeenCache or {}
@@ -22,8 +22,8 @@ local Pretty; Pretty = { --TODO this could be an Adapt grammar
 			IndentAmount = IndentAmount + IndentPerLevel
 			local Parts = {}
 			for Key, Value in pairs(Source) do
-				Key = "["..Pretty.Any(Key, IndentPerLevel, Multiline, IndentAmount, SeenCache).."]"
-				Value = Pretty.Any(Value, IndentPerLevel, Multiline, IndentAmount, SeenCache)
+				Key = "["..Pretty.Any(Key, Multiline, IndentPerLevel, IndentAmount, SeenCache).."]"
+				Value = Pretty.Any(Value, Multiline, IndentPerLevel, IndentAmount, SeenCache)
 				table.insert(Parts, ([[%s%s = %s]]):format(string.rep(" ",IndentAmount), Key, Value))
 			end
 			IndentAmount = IndentAmount - IndentPerLevel
@@ -31,9 +31,15 @@ local Pretty; Pretty = { --TODO this could be an Adapt grammar
 		end
 	end;
 
-	Any = function(Value, IndentPerLevel, Multiline, IndentAmount, SeenCache)
+	---@param Value any
+	---@param Multiline boolean?
+	---@param IndentPerLevel integer?
+	---@param IndentAmount integer?
+	---@param SeenCache table<table, boolean>?
+	---@return string
+	Any = function(Value, Multiline, IndentPerLevel, IndentAmount, SeenCache)
 		local Type = type(Value)
-		if Type == "table" then return Pretty.Table(Value, IndentPerLevel, Multiline, IndentAmount, SeenCache)
+		if Type == "table" then return Pretty.Table(Value, Multiline, IndentPerLevel, IndentAmount, SeenCache)
 		elseif Type == "string" then return Pretty.String(Value) 
 		else return tostring(Value) end
 	end;

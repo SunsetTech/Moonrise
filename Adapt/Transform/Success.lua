@@ -12,7 +12,7 @@ local Success = OOP.Declarator.Shortcuts(
 
 ---@param Value integer
 function Success:Initialize(Instance, Value)
-	Instance.Value = Value or true
+	Instance.Value = Value 
 end
 
 function Success:Lower()
