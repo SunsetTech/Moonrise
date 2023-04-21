@@ -80,7 +80,8 @@ end
 function Jump:Execute(MethodName, CurrentState, Argument) --Root
 	local Where, RootOf, Target
 	
-	if not CurrentState.JumpCache[self] then
+	--if not CurrentState.JumpCache[self] then
+	if true then
 		local SubPath = String.Explode(self.SubPath, ".")
 		Where,Target = Backtrack(CurrentState.RootLocation:GetHead(), SubPath)
 		
