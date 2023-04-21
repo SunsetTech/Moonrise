@@ -120,7 +120,7 @@ function Jump:Optimize()
 end
 
 function Jump:__tostring()
-	return "Goto: ".. self.SubPath
+	return "Jump'".. self.SubPath .."'"
 end
 
 return Jump

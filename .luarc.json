@@ -3,5 +3,8 @@
     "diagnostics.globals": [
         "err"
     ],
+	"workspace.library": [
+		"$HOME/Home/Projects/Libraries/Lua/"
+	],
     "completion.autoRequire": false
 }

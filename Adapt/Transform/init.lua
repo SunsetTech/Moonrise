@@ -12,7 +12,7 @@ return {
 	Grammar = require"Moonrise.Adapt.Transform.Grammar";
 	Filter = require"Moonrise.Adapt.Transform.Filter";
 	Jump = require"Moonrise.Adapt.Transform.Jump";
-	Left = require"Moonrise.Adapt.Transform.Left";
+	LPEG = require"Moonrise.Adapt.Transform.LPEG";
 	Not = require"Moonrise.Adapt.Transform.Not";
 	Nothing = require"Moonrise.Adapt.Transform.Nothing";
 	Packed = require"Moonrise.Adapt.Transform.Packed";
@@ -22,4 +22,5 @@ return {
 	Select = require"Moonrise.Adapt.Transform.Select";
 	Sequence = require"Moonrise.Adapt.Transform.Sequence";
 	Set = require"Moonrise.Adapt.Transform.Set";
+	Success = require"Moonrise.Adapt.Transform.Success";
 }

@@ -1,9 +1,15 @@
 local Array = {}
 
+---@param In any[]
 function Array.Last(In)
 	return In[#In]
 end
 
+---@param ArrayA any[]
+---@param ArrayB any[]
+---@param StartA integer
+---@param StartB integer
+---@return any[]
 function Array.FindMatch(ArrayA,ArrayB,StartA,StartB)
 	StartA = StartA or 1
 	StartB = StartB or 1
@@ -20,6 +26,9 @@ function Array.FindMatch(ArrayA,ArrayB,StartA,StartB)
 	return Match
 end
 
+---@param In any[]
+---@param What any[]
+---@return integer[]
 function Array.FindSequence(In,What)
 	local Indexes = {}
 	local Stride = #What-1
@@ -83,6 +92,7 @@ function Array.Concat(Sources)
 	return Merged
 end
 
+--dont remember what this is
 function Array.Zip(Zipper,Over,Iterator,State)
 	repeat
 		State, Link = Iterator(State)

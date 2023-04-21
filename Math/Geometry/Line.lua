@@ -1,7 +1,6 @@
-local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
-local Vec2D = Module.Sister"Vec2D"
+local Vec2D = require"Moonrise.Math.Geometry.Vec2D"
 
 local Line = OOP.Declarator.Shortcuts"Math.Line"
 

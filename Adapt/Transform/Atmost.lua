@@ -69,4 +69,8 @@ function Atmost:Raise(CurrentState, Argument)
 	end
 end
 
+function Atmost:__tostring()
+	return tostring(self.Children.Pattern) .."^-1"
+end
+
 return Atmost

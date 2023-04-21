@@ -1,8 +1,8 @@
 local posix = require("posix")
 
-local Package = {}
+local Posix = {}
 
-function Package.Fork(ChildProcessFunction,ParentProcessFunction)
+function Posix.Fork(ChildProcessFunction,ParentProcessFunction)
 	local ChildPID = posix.fork()
 	if (ChildPID == 0) then
 		return ChildProcessFunction(ChildPID)
@@ -11,10 +11,23 @@ function Package.Fork(ChildProcessFunction,ParentProcessFunction)
 	end
 end
 
-function Package.BidirectionalOpen(Program,Arguments)
+function Posix.ReadAll(FD)
+	local Buffer = ""
+	while true do 
+		local Characters = posix.read(FD,1024)
+		if (#Characters == 0) then
+			break
+		else
+			Buffer = Buffer .. Characters
+		end
+	end
+	return Buffer
+end
+
+function Posix.BidirectionalOpen(Program,Arguments)
 	local InputPipeR, InputPipeW = posix.pipe()
 	local OutputPipeR, OutputPipeW = posix.pipe()
-	return Package.Fork(
+	return Posix.Fork(
 		function(PID)
 			posix.close(InputPipeW)
 			posix.close(OutputPipeR)
@@ -33,10 +46,10 @@ function Package.BidirectionalOpen(Program,Arguments)
 	)
 end
 
-function Package.CallScriptFunction(ScriptPath,FunctionName,Arguments)
+function Posix.CallScriptFunction(ScriptPath,FunctionName,Arguments)
 	return os.execute(
 		([[source "%s"; %s %s]]):format(ScriptPath,FunctionName,table.concat(Arguments," "))
 	)
 end
 
-return Package
+return Posix

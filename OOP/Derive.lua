@@ -21,8 +21,8 @@ return function(Name, Inherits, Static, Dynamic, Linker)
 	Static.__inherits = Inherits or {}
 	Static.__link = Linker and Linker(Static, Dynamic) or Tools.Functional.Return
 	
-	for Name, Member in pairs(Static:__link{}) do
-		Static[Name] = Static[Name] or Member
+	for _Name, Member in pairs(Static:__link{}) do
+		Static[_Name] = Static[_Name] or Member
 	end
 	
 	for _, Inherit in pairs(Inherits) do

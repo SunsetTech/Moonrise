@@ -1,36 +1,40 @@
-local Package = {}
-
-local function GetOption(Argument)
-	return Argument:match"-+(.+)"
-end
-
-local function IsOption(Argument)
-	return GetOption(Argument) ~= nil
-end
-
-function Package.ParseOptions(Arguments,Options)
-	local Orphans = {}
-	local Map = {}
-	while #Arguments > 0 do
-		local Argument = table.remove(Arguments,1)
-		if IsOption(Argument) then
-			local Name = GetOption(Argument)
-			local Option = Options[Name]
-			local Setting
-			if not IsOption(Arguments[1]) then
-				local Convert = Option.Convert or tostring
-				Setting = Convert(table.remove(Arguments,1))
-			end
-			Map[Name] = Setting or true
+local function SetValue(In, Key, Value)
+	Key = Key:lower()
+	if In[Key] then
+		if (type(In[Key]) == "table") then
+			table.insert(In[Key], Value)
 		else
-			table.insert(Orphans,Argument)
+			In[Key] = {In[Key], Value}
 		end
+	else
+		In[Key] = Value
 	end
-	local Settings =  {}
-	for Name,Option in pairs(Options) do
-		Settings[Name] = Map[Name] or Option.Default
-	end
-	return Settings, Orphans
 end
 
-return Package
+local CommandLine; CommandLine = {
+	GetOptions = function()
+		local Grammar = require"Moonrise.Grammar.CommandLine"
+		local Process = require"Moonrise.Adapt.Process"
+		local StringStream = require"Moonrise.Adapt.Stream.String"
+		local Results = {
+			Settings = {};
+			Arguments = {};
+		}
+		for Index = 1, #arg do
+			local Success, Result = Process(Grammar, "Raise", StringStream(arg[Index]))
+			if Success then
+				local Keys, Value = Result.Key, Result.Value
+				if type(Keys) == "table" then
+					for _, Key in pairs(Keys) do
+						SetValue(Results.Settings, Key, Value or true)
+					end
+				else
+					SetValue(Results.Settings, Keys, Value or true)
+				end
+			else
+				table.insert(Results.Arguments, arg[Index])
+			end
+		end
+		return Results
+	end;
+}; return CommandLine;

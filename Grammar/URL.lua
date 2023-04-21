@@ -11,7 +11,7 @@ local StringParser; StringParser = {
 	end;
 	Lower = NYC;
 	Create = function(Pattern)
-		return TF.Filter(Pattern, StringParser.Raise, StringParser.Lower)
+		return Pattern / StringParser 
 	end
 }
 
@@ -155,45 +155,29 @@ return TF.Grammar{
 	Parameters = TF.Grammar{
 		Segment = TF.Grammar{
 			Key = StringParser.Create(
-				TF.Atleast(
-					1, TF.Dematch(TF.Bytes(1), TF.String"=")
-				)
+				(TF.Bytes(1) - TF.String"=")^1
 			);
 			Value = StringParser.Create(
-				TF.Atleast(
-					1, TF.Dematch(TF.Bytes(1), TF.String"&")
-				)
+				(TF.Bytes(1) - TF.String"&")^1
 			);
-			TF.Filter(
-				TF.Sequence{TF.Rule"Key", TF.String"=", TF.Rule"Value"},
-				Filters.Parameter.Raise,
-				Filters.Parameter.Lower
-			);
+			(
+				TF.Rule"Key"* TF.String"=" * TF.Rule"Value"
+			) / Filters.Parameter
 		};
-		TF.Filter(
-			TF.Sequence{
-				TF.String"?",
-				TF.Rule"Segment",
-				TF.All(
-					TF.Sequence{
-						TF.String"&",
-						TF.Rule"Segment"
-					}
-				)
-			},
-			Filters.Parameters.Raise,
-			Filters.Parameters.Lower
-		);
+		(
+			TF.String"?"
+			* TF.Rule"Segment"
+			* (
+				TF.String"&"
+				* TF.Rule"Segment"
+			)^0
+		) / Filters.Parameters;
 	};
-	TF.Filter(
-		TF.Sequence{
-			TF.Atmost(1, TF.Rule"Protocol"),
-			TF.Rule"Domain",
-			TF.Atmost(1, TF.Rule"Port"),
-			TF.Atmost(1, TF.Rule"Path"),
-			TF.Atmost(1, TF.Rule"Parameters")
-		},
-		Filters.URL.Raise,
-		Filters.URL.Lower
-	);
+	(
+		TF.Rule"Protocol"^-1
+		* TF.Rule"Domain"
+		* (TF.Rule"Port"^-1)
+		* (TF.Rule"Path"^-1)
+		* (TF.Rule"Parameters"^-1)
+	) / Filters.URL;
 } --TODO this definitely parses things which are not URLs too

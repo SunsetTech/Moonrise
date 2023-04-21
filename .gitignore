@@ -1,4 +1,5 @@
 Sisyphus/.Sisyphus-Old
 *.OLD/
+*.OLD
 **/.vim-sessions/
 .vim-sessions/

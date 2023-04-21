@@ -45,13 +45,17 @@ function Package.FilterHidden(Name)
 	end
 end
 
+function Package.NoOp(Name)
+	return true, Name
+end
+
 function Package.List(Name,FilterSpecial,FilterHidden)
 	return Iteration.MakeFilter(
 		(
 			FilterHidden and Package.FilterHidden 
 			or (
 				FilterSpecial and Package.FilterSpecial
-				or Filters.NoOp
+				or Package.NoOp
 			)
 		),
 		lfs.dir,Name
