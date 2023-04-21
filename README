@@ -1,0 +1,6 @@
+some of this is broken
+currently must do
+
+require"Moonrise.Import.Install".All() 
+before using
+must also do unpack=table.unpack on lua 5.3+
