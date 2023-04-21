@@ -12,7 +12,6 @@ return {
 	Grammar = require"Moonrise.Adapt.Transform.Grammar";
 	Filter = require"Moonrise.Adapt.Transform.Filter";
 	Jump = require"Moonrise.Adapt.Transform.Jump";
-	LPEG = require"Moonrise.Adapt.Transform.LPEG";
 	Not = require"Moonrise.Adapt.Transform.Not";
 	Nothing = require"Moonrise.Adapt.Transform.Nothing";
 	Packed = require"Moonrise.Adapt.Transform.Packed";

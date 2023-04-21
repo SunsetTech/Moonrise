@@ -21,7 +21,7 @@ local function TryChild(CurrentState, MethodName, Index, Child, Argument, Bookma
 	assert(Child)
 	local Success, Result = Execution.Recurse(
 		CurrentState,
-		MethodName, tostring(Index), Child,
+		MethodName, Child,
 		Argument
 	)
 	

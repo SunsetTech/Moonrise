@@ -1,6 +1,9 @@
+local Tools = {
+	Table = require"Moonrise.Tools.Table";
+	String = require"Moonrise.Tools.String";
+	Pretty = require"Moonrise.Tools.Pretty";
+}
 local OOP = require"Moonrise.OOP"
-local Location = require"Moonrise.Adapt.Execution.Location"
-local LocationAllocator = require"Moonrise.Adapt.Optimization.LocationAllocator"
 
 ---@class Bookmark
 ---@field At integer
@@ -14,20 +17,76 @@ local LocationAllocator = require"Moonrise.Adapt.Optimization.LocationAllocator"
 ---@field private Variables table
 ---@field private IsInVariableNames table
 ---@field private VariableNames string[]
----@field public JumpCache table
 ---@field public RaiseCache table
+---@field public NameMap table
+---@field public JumpMap table
 local State = OOP.Declarator.Shortcuts"Moonrise.Adapt.Execution.State"
 
 ---@param Instance Adapt.Execution.State
 ---@param Buffer Adapt.Stream.Base
 function State:Initialize(Instance, Buffer, Debug) --TODO registers
 	Instance.Buffer = Buffer
-	Instance.Debug = Debug or false
+	
 	Instance.Variables = {}
 	Instance.IsInVariableNames = {}
 	Instance.VariableNames = {}
-	Instance.JumpCache = {}
-	Instance.RaiseCache = {}
+	
+	Instance.JumpMap = {}
+	Instance.NameMap = {}
+
+	Instance.Debug = Debug or true
+end
+
+---@param Node Adapt.Transform.Base
+---@param SubPath table<integer, string>
+local function ForwardSearch(Node, SubPath)
+	local CurrentNode = Node
+	for Index = 1,#SubPath do
+		local Part = SubPath[Index]
+		---@cast CurrentNode Adapt.Transform.Compound
+		if CurrentNode.Children and CurrentNode.Children[Part] then
+			CurrentNode = CurrentNode.Children[Part]
+		else
+			return
+		end
+	end
+	return CurrentNode
+end
+
+local function BackwardSearch(Stack, SubPath )
+	for Index = #Stack, 1, -1 do
+		local Haystack = Stack[Index]
+		local Needle = ForwardSearch(Haystack, SubPath)
+		if Needle then
+			return Needle
+		end
+	end
+end
+
+function State:Link(Node, At, Stack)
+	Stack = Stack or {Node}
+	At = At or {"Root"}
+	local Path = table.concat(At,".")
+	print(Path, Node)
+	self.NameMap[Node] = Path
+	if Node.Children then
+		for Name, Child in pairs(Node.Children) do
+			Tools.Table.PushLast(At, Name)
+			Tools.Table.PushLast(Stack, Child)
+				self:Link(Child, At, Stack)
+				if OOP.Reflection.Type.Name(Child) == "Adapt.Transform.Jump" then
+					---@cast Child Adapt.Transform.Jump
+					print("Linking Jump (".. tostring(Child) ..")")
+					local SubPath = Tools.String.Explode(Child.SubPath,".")
+					local Needle = BackwardSearch(Stack, SubPath)
+					assert(Needle, "Didn't find jump target ".. Child.SubPath)
+					print("Found ".. tostring(Needle))
+					self.JumpMap[Child] = Needle
+				end
+			Tools.Table.PopLast(Stack)
+			Tools.Table.PopLast(At)
+		end
+	end
 end
 
 ---comment
@@ -46,25 +105,6 @@ end
 ---@return any
 function State:GetVariable(Key)
 	return self.Variables[Key]
-end
-
----@param Name string
----@param Node Adapt.Transform.Base
----@return Adapt.Execution.Location #the location for the pushed
-function State:AppendLocation(Name, Node)
-	if self.RootLocation == nil then
-		self.RootLocation = LocationAllocator.Allocate(Name, Node)
-		return self.RootLocation
-	else
-		local Head = self.RootLocation:GetHead()
-		Head:Push(Name, Node)
-		return Head:GetLatest()
-	end
-end
-
----@return string
-function State:GetPath()
-	return self.RootLocation and self.RootLocation:ToPath() or ""
 end
 
 --[[

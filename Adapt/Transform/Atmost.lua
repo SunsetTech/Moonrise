@@ -29,7 +29,7 @@ function Atmost:Lower(CurrentState, Arguments)
 				local Result
 				Success, Result = Execution.Recurse(
 					CurrentState,
-					"Lower", "Pattern", self.Children.Pattern, Argument
+					"Lower", self.Children.Pattern, Argument
 				)
 				if Success then
 					table.insert(Results, Result)
@@ -56,7 +56,7 @@ function Atmost:Raise(CurrentState, Argument)
 			local Bookmark = CurrentState:Mark()
 			local Success, Result = Execution.Recurse(
 				CurrentState,
-				"Raise", "Pattern", self.Children.Pattern, Argument
+				"Raise", self.Children.Pattern, Argument
 			)
 			if Success then
 				table.insert(Results, Result)

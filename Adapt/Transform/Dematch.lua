@@ -24,10 +24,10 @@ end
 
 function Dematch:Recurse(MethodName, CurrentState, Argument)
 	local Bookmark = CurrentState:Mark()
-	local WithoutSuccess = Execution.Recurse(CurrentState, MethodName, "Without", self.Children.Without, Argument)
+	local WithoutSuccess = Execution.Recurse(CurrentState, MethodName, self.Children.Without, Argument)
 	if not WithoutSuccess then
 		CurrentState:Rewind(Bookmark)
-		local Success, Result = Execution.Recurse(CurrentState, MethodName, "With", self.Children.With, Argument)
+		local Success, Result = Execution.Recurse(CurrentState, MethodName, self.Children.With, Argument)
 		assert(Success ~= nil)
 		return Success, Result
 	end

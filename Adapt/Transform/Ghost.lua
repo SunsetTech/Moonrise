@@ -22,7 +22,7 @@ end
 ---@return boolean, any
 function Ghost:Execute(MethodName, CurrentState, Argument)
 	local Bookmark = CurrentState:Mark()
-		local Success, Result = Execution.Recurse(CurrentState, MethodName, "Pattern", self.Children.Pattern, Argument)
+		local Success, Result = Execution.Recurse(CurrentState, MethodName, self.Children.Pattern, Argument)
 	CurrentState:Rewind(Bookmark)
 	return Success, Result --This is supposed to not consume input (or return a value) but if we dont return what made us match we wont match on Lower. i suspect there is still a subtle bug present we may need a slightly more sophisticated solution
 end

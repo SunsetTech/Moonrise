@@ -37,7 +37,7 @@ end
 function Filter:Raise(CurrentState, Argument) --Root
 	return self.Filters.Raise(
 		function(_Argument)
-			return Execution.Recurse(CurrentState, "Raise", "Pattern", self.Children.Pattern, _Argument)
+			return Execution.Recurse(CurrentState, "Raise", self.Children.Pattern, _Argument)
 		end, Argument, CurrentState
 	)
 end
@@ -47,13 +47,12 @@ end
 function Filter:Lower(CurrentState, Argument)
 	return self.Filters.Lower(
 		function(_Argument)
-			return Execution.Recurse(CurrentState, "Lower", "Pattern", self.Children.Pattern, _Argument)
+			return Execution.Recurse(CurrentState, "Lower", self.Children.Pattern, _Argument)
 		end, Argument, CurrentState
 	)
 end
 
 function Filter:__tostring()
-	print(self.Filters.__DebugName)
 	return "(".. tostring(self.Children.Pattern) .."/{".. (self.Filters.__DebugName or tostring(self.Filters)) .."})"
 end
 

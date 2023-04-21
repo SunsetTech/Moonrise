@@ -30,7 +30,7 @@ function All:Lower(CurrentState, Arguments)
 			local Result
 			Success, Result = Execution.Recurse(
 				CurrentState,
-				"Lower", "Pattern", self.Children.Pattern, Argument
+				"Lower", self.Children.Pattern, Argument
 			)
 			if Success then
 				table.insert(Results, Result)
@@ -58,7 +58,7 @@ function All:Raise(CurrentState, Argument)
 			local Result
 			Success, Result = Execution.Recurse(
 				CurrentState,
-				"Raise", "Pattern", self.Children.Pattern, Argument
+				"Raise", self.Children.Pattern, Argument
 			)
 			if Success then
 				table.insert(Results, Result)

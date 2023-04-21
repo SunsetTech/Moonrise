@@ -6,17 +6,12 @@ local Execution = require"Moonrise.Adapt.Execution"
 ---@param Argument any
 local Process = function(Node, MethodName, Buffer, Argument, Debug)
 	assert(Node ~= nil)
-	--only users should only use this
-	--module internals should use Recurse
 	local ProgramState = Execution.State(Buffer, Debug)
 	ProgramState:Optimize()
+	ProgramState:Link(Node)
 	ProgramState.Mark = ProgramState.Mark
-	local Success, Result = Execution.Recurse(
-		ProgramState, 
-		MethodName, "Program", 
-		Node, Argument
-	)
-	
+	print(Node)
+	local Success, Result = Execution.Recurse( ProgramState, MethodName, Node, Argument)
 	return Success, Result
 end;
 

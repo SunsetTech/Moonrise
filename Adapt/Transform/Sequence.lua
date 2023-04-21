@@ -18,7 +18,7 @@ function Sequence:ExecuteChildren(ExecutionState, MethodName, Arguments)
 		
 		local Success, Result = Execution.Recurse(
 			ExecutionState, 
-			MethodName, tostring(Index), Child, 
+			MethodName, Child, 
 			Argument
 		)
 		

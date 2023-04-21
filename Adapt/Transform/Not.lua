@@ -23,7 +23,7 @@ end
 ---@return boolean
 function Not:Execute(MethodName, CurrentState, Argument)
 	local Bookmark = CurrentState:Mark()
-		local Success = Execution.Recurse(CurrentState, MethodName, "Pattern", self.Children.Pattern, Argument)
+		local Success = Execution.Recurse(CurrentState, MethodName, self.Children.Pattern, Argument)
 	CurrentState:Rewind(Bookmark)
 	return Success
 end

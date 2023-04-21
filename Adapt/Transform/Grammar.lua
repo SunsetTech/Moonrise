@@ -17,11 +17,11 @@ function Grammar:Initialize(Instance, Children)
 end
 
 function Grammar:Raise(CurrentState, Argument) --Root
-	return Execution.Recurse(CurrentState, "Raise", "1", self.Children[1], Argument)
+	return Execution.Recurse(CurrentState, "Raise", self.Children[1], Argument)
 end
 
 function Grammar:Lower(CurrentState, Argument)
-	return Execution.Recurse(CurrentState, "Lower", "1", self.Children[1], Argument)
+	return Execution.Recurse(CurrentState, "Lower", self.Children[1], Argument)
 end
 
 return Grammar
