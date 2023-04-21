@@ -4,6 +4,7 @@
 ---@class Adapt.Transform.Filter.Table
 ---@field Raise Adapt.Transform.Filter.Method
 ---@field Lower Adapt.Transform.Filter.Method
+---@field __DebugName string?
 
 local OOP = require"Moonrise.OOP"
 
@@ -21,12 +22,13 @@ Filter = OOP.Declarator.Shortcuts(
 ---@param Pattern Adapt.Transform.Base
 ---@param Raise Adapt.Transform.Filter.Method
 ---@param Lower Adapt.Transform.Filter.Method
-function Filter:Initialize(Instance, Pattern, Raise, Lower)
+function Filter:Initialize(Instance, Pattern, Raise, Lower, DebugName)
 ---@diagnostic disable-next-line:undefined-field
 		Filter.Parents.Compound:Initialize(Instance, {Pattern = Pattern})
 	Instance.Filters = {
 		Raise = Raise;
 		Lower = Lower;
+		__DebugName = DebugName;
 	}
 end
 
@@ -48,6 +50,11 @@ function Filter:Lower(CurrentState, Argument)
 			return Execution.Recurse(CurrentState, "Lower", "Pattern", self.Children.Pattern, _Argument)
 		end, Argument, CurrentState
 	)
+end
+
+function Filter:__tostring()
+	print(self.Filters.__DebugName)
+	return "(".. tostring(self.Children.Pattern) .."/{".. (self.Filters.__DebugName or tostring(self.Filters)) .."})"
 end
 
 return Filter

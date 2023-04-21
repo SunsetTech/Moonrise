@@ -1,6 +1,5 @@
 local Module = require"Moonrise.Import.Module"
-local Tools = require"Moonrise.Tools"
-local Error = Tools.Error
+local Error = require"Moonrise.Tools.Error"
 local Derive = require"Moonrise.OOP.Derive"
 
 ---@class OOP.Declarator.Shortcuts
@@ -28,7 +27,7 @@ local Shortcuts = Module.Relative"Class.Factory"(
 				elseif Key == "Parents" then
 					return Type.__parents
 				elseif Key:sub(1,2) == "__" then
-					Tools.Error.CallerError"Definition member not found"
+					Error.CallerError"Definition member not found"
 				else
 					return Type.__members[Key]
 				end

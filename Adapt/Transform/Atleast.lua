@@ -65,4 +65,8 @@ function Atleast:Raise(CurrentState, Argument)
 	end
 end
 
+function Atleast:__tostring()
+	return tostring(self.Children.Pattern) .."^".. self.Amount
+end
+
 return Atleast

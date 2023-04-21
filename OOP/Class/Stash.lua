@@ -1,13 +1,13 @@
-local Module = require"Moonrise.Import.Module"
+--local Module = require"Moonrise.Import.Module"
 
 local function NewTable()
 	return {}
 end
 
 local InitializeEntry = {}
-return Module.Relative"Declarator.Definition"(
+return require"Moonrise.OOP.Declarator.Definition"(
 	"OOP.Class.Stash", {
-		Module.Sister"Constructor"
+		require"Moonrise.OOP.Class.Constructor"
 	}, 
 	{
 		__mode = "k";

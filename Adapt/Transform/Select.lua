@@ -80,5 +80,13 @@ function Select:Lower(CurrentState, ArgumentMap)
 	return self:TryChildren(CurrentState, "Lower", ArgumentMap)
 end
 
+function Select:__tostring()
+	local Parts = {}
+	for _, Child in pairs(self.Children) do
+		table.insert(Parts, tostring(Child))
+	end
+	return "(".. table.concat(Parts, " + ") ..")"
+end
+
 return Select
 

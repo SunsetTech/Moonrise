@@ -141,7 +141,7 @@ local CommandLine; CommandLine = {
 						* (
 							(TF.Rule"Known" + TF.Rule"Unknown") / BasicFilters.Select
 						)
-					) / BasicFilters.Sequence(2) / BasicFilters.Debug"Long" / Filters.Long(LongOptions);
+					) / BasicFilters.Sequence(2) / Filters.Long(LongOptions);
 				};
 				(TF.Rule"Long" + TF.Rule"Short")/BasicFilters.Select;
 			};

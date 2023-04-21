@@ -27,7 +27,7 @@ end
 return function(CurrentState, MethodName, At, Argument)--TODO cache
 	local StartByte = CurrentState.Buffer:At()
 	if CurrentState.Debug then
-		print(string.rep("\t", Indent) .."->", MethodName, At:ToPathFromParent(), Argument or "", MethodName=="Raise" and CurrentState:Peek(6) or "")
+		print(string.rep("| ", Indent) .."->", MethodName, At:ToPathFromParent(), At.Node, Argument or "", MethodName=="Raise" and CurrentState:Peek(6) or "")
 		Indent = Indent + 1
 	end
 	
@@ -50,7 +50,7 @@ return function(CurrentState, MethodName, At, Argument)--TODO cache
 		end
 		Indent = Indent - 1
 		local ReturnFormat = [[%s %s(%s): (%s, %s) <- (%s)]]
-		print(string.rep("\t", Indent) .. ReturnFormat:format(MethodName, At:ToPathFromParent(), At.Node, tostring(Success), tostring(Result), Read))
+		print(string.rep("| ", Indent) .. ReturnFormat:format(MethodName, At:ToPathFromParent(), At.Node, tostring(Success), tostring(Result), Read))
 		--print(string.rep("\t", Indent) ..tostring(Success).."<-", MethodName, At:ToPathFromParent(), Result,"<",Read)
 	end
 

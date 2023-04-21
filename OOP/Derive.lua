@@ -1,4 +1,8 @@
-local Tools = require"Moonrise.Tools"
+local Tools ={
+	Table = require"Moonrise.Tools.Table";
+	Copy = require"Moonrise.Tools.Copy";
+}
+local Functional = require"Moonrise.Functional"
 
 --- @param Name string
 --- @param Inherits table
@@ -19,7 +23,7 @@ return function(Name, Inherits, Static, Dynamic, Linker)
 	
 	Static.__type = Name
 	Static.__inherits = Inherits or {}
-	Static.__link = Linker and Linker(Static, Dynamic) or Tools.Functional.Return
+	Static.__link = Linker and Linker(Static, Dynamic) or Functional.Basic.Return
 	
 	for _Name, Member in pairs(Static:__link{}) do
 		Static[_Name] = Static[_Name] or Member
@@ -32,7 +36,7 @@ return function(Name, Inherits, Static, Dynamic, Linker)
 			Inherit.__link(Static, {})
 		)
 		for Key, Member in pairs(Members) do 
-			if Static.__link ~= Tools.Functional.Return and Inherit.__link ~= Tools.Functional.Return then
+			if Static.__link ~= Functional.Basic.Return and Inherit.__link ~= Functional.Basic.Return then
 				Static.__link.Generators[Key] = Static.__link.Generators[Key] or Inherit.__link.Generators[Key]
 			end
 			Static[Key] = Static[Key] or Member

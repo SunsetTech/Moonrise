@@ -39,7 +39,8 @@ local Pretty; Pretty = { --TODO this could be an Adapt grammar
 	---@return string
 	Any = function(Value, Multiline, IndentPerLevel, IndentAmount, SeenCache)
 		local Type = type(Value)
-		if Type == "table" then return Pretty.Table(Value, Multiline, IndentPerLevel, IndentAmount, SeenCache)
+		if Type == "table" then 
+			return Pretty.Table(Value, Multiline, IndentPerLevel, IndentAmount, SeenCache)
 		elseif Type == "string" then return Pretty.String(Value) 
 		else return tostring(Value) end
 	end;

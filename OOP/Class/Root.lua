@@ -1,12 +1,12 @@
 local Module = require"Moonrise.Import.Module"
-local Tools = require"Moonrise.Tools"
+--local Tools = require"Moonrise.Tools"
 --local Debug = require"Moonrise.Debug"
 
-local Error = Tools.Error
-local String = Tools.String
-local Array = Tools.Array
+local Error = require"Moonrise.Tools.Error"
+local String = require"Moonrise.Tools.String"
+local Array = require"Moonrise.Tools.Array"
 
-local type = Tools.Inspect.Get.Type
+local type = require"Moonrise.Tools.Inspect".Get.Type
 
 local Create = Module.Relative"Create"
 local Derive = Module.Relative"Derive"

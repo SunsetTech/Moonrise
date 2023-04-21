@@ -54,8 +54,10 @@ end
 ---@param PathParts string[]
 ---@return Adapt.Execution.Location, Adapt.Execution.Location|nil
 local function Backtrack(At, PathParts)
+	print("Begining Backtrack @ ".. At:ToPathFromParent())
 	local Target
 	repeat
+		print("Looking for ".. table.concat(PathParts, ".") .." in ".. At:ToPathFromParent())
 		Target = Lookup(At, PathParts)
 		if not Target then
 			At = At.Parent

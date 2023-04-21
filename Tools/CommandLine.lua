@@ -1,3 +1,7 @@
+local Process = require"Moonrise.Adapt.Process"
+local StringStream = require"Moonrise.Adapt.Stream.String"
+local Grammar = require"Moonrise.Grammar.CommandLine"
+
 local function SetValue(In, Key, Value)
 	Key = Key:lower()
 	if In[Key] then
@@ -14,25 +18,21 @@ end
 local CommandLine; CommandLine = {
 	GetOptions = {
 		Constrained = function(ShortOptions, LongOptions)
-			local Grammar = require"Moonrise.Grammar.CommandLine.Constrained".Grammar(ShortOptions, LongOptions)
-			local Process = require"Moonrise.Adapt.Process"
-			local StringStream = require"Moonrise.Adapt.Stream.String"
+			local ComposedGrammar = Grammar.Constrained.Grammar(ShortOptions, LongOptions)
 			
 			local ArgString = table.concat(arg,"<|>") .."<|>"
 			
-			local _, Result = Process(Grammar, "Raise", StringStream(ArgString), nil)
+			local _, Result = Process(ComposedGrammar, "Raise", StringStream(ArgString), nil)
 			return Result
 		end;
 		Free = function()
-			local Grammar = require"Moonrise.Grammar.CommandLine.Free"
-			local Process = require"Moonrise.Adapt.Process"
-			local StringStream = require"Moonrise.Adapt.Stream.String"
 			local Results = {
 				Settings = {};
 				Arguments = {};
 			}
+			
 			for Index = 1, #arg do
-				local Success, Result = Process(Grammar, "Raise", StringStream(arg[Index]))
+				local Success, Result = Process(Grammar.Free, "Raise", StringStream(arg[Index]))
 				if Success then
 					local Keys, Value = Result.Key, Result.Value
 					if type(Keys) == "table" then

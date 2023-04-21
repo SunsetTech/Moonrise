@@ -91,7 +91,7 @@ end
 ---@return Adapt.Transform.Filter
 function Base:__div(RHS)
 	local Filter = require"Moonrise.Adapt.Transform.Filter"
-	return Filter(self, RHS.Raise, RHS.Lower)
+	return Filter(self, RHS.Raise, RHS.Lower, RHS.__DebugName)
 end
 
 ---@param RHS integer

@@ -1,5 +1,7 @@
 local Module = require"Moonrise.Import.Module"
-local Tools = require"Moonrise.Tools"
+local Tools = {
+	Error = require"Moonrise.Tools.Error"
+}
 
 local Create = require"Moonrise.OOP.Create"
 local Derive = require"Moonrise.OOP.Derive"

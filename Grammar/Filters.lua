@@ -4,6 +4,7 @@ NYI = function() error"NYI" end
 ---@type table<string, Adapt.Transform.Filter.Table | fun(...):Adapt.Transform.Filter.Table>
 return {
 	Select = {
+		__DebugName = "Select";
 		Raise = function (Recurse, Argument)
 			local Success, Result = Recurse(Argument)
 			return Success, Success and Result[Result.__which]
@@ -11,6 +12,7 @@ return {
 	};
 	Sequence = function(Index) 
 		return {
+			__DebugName = "Sequence(".. Index ..")";
 			Raise = function (Recurse, Argument)
 				local Success, Result = Recurse(Argument)
 				return Success, Success and Result[Index]
