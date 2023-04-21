@@ -1,40 +1,18 @@
 local TF = require"Moonrise.Adapt.Transform"
 local String = require"Moonrise.Grammar.String"
+local BuiltinFilters = require"Moonrise.Grammar.Filters"
 
 local NYI = function() error"NYI" end;
 
 ---@type table<string, Adapt.Transform.Filter.Table>
 local Filters; Filters = {
-	LongSwitch = {
-		Raise= function(Recurse, Argument)
-			local Success, Result = Recurse(Argument)
-			return Success, Success and Result[2]
-		end;
-		Lower = NYI;
-	};
-	ShortSwitches = {
-		Raise = function(Recurse, Argument)
-			local Success, Result = Recurse(Argument)
-			return Success, Success and Result[2]
-		end;
-		Lower = NYI;
-	};
-	Option = {
-		Raise = function (Recurse, Argument)
-			local Success, Result = Recurse(Argument)
-			return Success, Success and Result[Result.__which]
-		end;
-		Lower = NYI;
-	};
-	SettingValue = {
-		Raise = function (Recurse, Argument, CurrentState)
-			local Success, Result = Recurse(Argument)
-			return Success, Success and Result[2]
-		end;
-		Lower = NYI;
-	};
+
+	LongSwitch = BuiltinFilters.Sequence(2);
+	ShortSwitches = BuiltinFilters.Sequence(2);
+	SettingValue = BuiltinFilters.Sequence(2);
+	Option = BuiltinFilters.Select;
 	Setting = {
-		Raise = function (Recurse, Argument, CurrentState)
+		Raise = function (Recurse, Argument)
 			local Success, Result = Recurse(Argument)
 			return Success, Success and {Key = Result[1]; Value = Result[2][1]}
 		end

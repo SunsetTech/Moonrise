@@ -91,22 +91,16 @@ local Filters = {
 }
 
 return TF.Grammar{
-	Protocol = TF.Filter(
-		TF.Sequence{
-			StringParser.Create(
-				TF.All(
-					TF.Dematch(
-						TF.Bytes(1),
-						TF.String"://"
-					)
-				)
-			),
-			TF.String"://"
-		},
-		Filters.Protocol.Raise,
-		Filters.Protocol.Lower
-	);
-
+	Protocol = (
+		StringParser.Create(
+			(
+				TF.Bytes(1) 
+				- TF.String"://"
+			) ^ 0
+		)
+		* TF.String"://"
+	) / Filters.Protocol;
+	
 	Domain = TF.Grammar{
 		Segment = StringParser.Create(
 			TF.All(
@@ -132,11 +126,7 @@ return TF.Grammar{
 		)
 	};
 
-	Port = TF.Filter(
-		TF.Sequence{TF.String":", StringParser.Create(TF.Atleast(1, TF.Range("0","9")))},
-		Filters.Port.Raise,
-		Filters.Port.Lower
-	);
+	Port = TF.String":" * StringParser.Create(TF.Range("0","9")^1); --TF.Sequence{TF.String":", StringParser.Create(TF.Atleast(1, TF.Range("0","9")))};
 
 	Path = TF.Grammar{
 		Segment = StringParser.Create(TF.All(TF.Dematch(TF.Bytes(1), TF.Set"/?")));
