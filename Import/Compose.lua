@@ -1,6 +1,6 @@
 local Utils = require"Moonrise.Import.Utils"
 
-local Function, Env = Utils.From("Moonrise.Tools",{"Function","Env"})
+local Copy, Env = Utils.From("Moonrise.Tools",{"Copy","Env"})
 
 local Package = {}
 
@@ -9,7 +9,7 @@ function Package.Override(Require,OverrideRequire)
 		{require=OverrideRequire},
 		_ENV or debug.getfenv(debug.getinfo(0,"f").func) 
 	)
-	return Function.Copy(Require,NewEnv,true)
+	return Copy.Function(Require,NewEnv,true)
 end
 
 local OldRequire = require
@@ -21,7 +21,7 @@ end
 function Package.Pipeline(Functions,InnerRequire)
 	--Create a copy of require to ensure the env is the current env
 	InnerRequire = InnerRequire or DefaultRequire
-	local Pipeline = Function.Copy(
+	local Pipeline = Copy.Function(
 		InnerRequire,
 		_ENV or debug.getfenv(debug.getinfo(0,"f").func),
 		true)

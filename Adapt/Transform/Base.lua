@@ -116,4 +116,9 @@ function Base:__unm()
 	return Not(self)
 end
 
+function Base:__call()
+	local Expect = require"Moonrise.Adapt.Transform.Expect"
+	return Expect(self)
+end
+
 return Base

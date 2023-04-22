@@ -34,7 +34,7 @@ function State:Initialize(Instance, Buffer, Debug) --TODO registers
 	Instance.JumpMap = {}
 	Instance.NameMap = {}
 
-	Instance.Debug = Debug or true
+	Instance.Debug = Debug or false
 end
 
 ---@param Node Adapt.Transform.Base
@@ -53,9 +53,10 @@ local function ForwardSearch(Node, SubPath)
 	return CurrentNode
 end
 
-local function BackwardSearch(Stack, SubPath )
+local function BackwardSearch(Stack, SubPath)
 	for Index = #Stack, 1, -1 do
 		local Haystack = Stack[Index]
+		--print("Searching for ".. table.concat(SubPath, ".") .." in ".. tostring(Haystack))
 		local Needle = ForwardSearch(Haystack, SubPath)
 		if Needle then
 			return Needle
@@ -67,7 +68,10 @@ function State:Link(Node, At, Stack)
 	Stack = Stack or {Node}
 	At = At or {"Root"}
 	local Path = table.concat(At,".")
-	print(Path, Node)
+	if self.NameMap[Node] == Path then
+		print"Reusing links"
+		return --Already linked beyond here
+	end
 	self.NameMap[Node] = Path
 	if Node.Children then
 		for Name, Child in pairs(Node.Children) do
@@ -76,11 +80,9 @@ function State:Link(Node, At, Stack)
 				self:Link(Child, At, Stack)
 				if OOP.Reflection.Type.Name(Child) == "Adapt.Transform.Jump" then
 					---@cast Child Adapt.Transform.Jump
-					print("Linking Jump (".. tostring(Child) ..")")
 					local SubPath = Tools.String.Explode(Child.SubPath,".")
 					local Needle = BackwardSearch(Stack, SubPath)
-					assert(Needle, "Didn't find jump target ".. Child.SubPath)
-					print("Found ".. tostring(Needle))
+					assert(Needle, "Didn't find jump target ".. Child.SubPath .." for ".. table.concat(At, "."))
 					self.JumpMap[Child] = Needle
 				end
 			Tools.Table.PopLast(Stack)
@@ -160,6 +162,10 @@ function State:Read(Count)
 	return self.Buffer:Read(Count)
 end
 
+function State:Position()
+	return self.Buffer:At()
+end
+
 function State:Peek(Count)
 	local Bookmark = self:Mark()
 		local Contents = self:Read(Count)
@@ -181,7 +187,7 @@ function State:Optimize()
 	self.CopyVariables = State.CopyVariables
 	self.RestoreVariables = State.RestoreVariables
 	self.ClearMark = State.ClearMark
-	self.AppendLocation = State.AppendLocation
+	self.Link = State.Link
 end
 
 return State

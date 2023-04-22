@@ -24,5 +24,13 @@ function Grammar:Lower(CurrentState, Argument)
 	return Execution.Recurse(CurrentState, "Lower", self.Children[1], Argument)
 end
 
+function Grammar:__tostring()
+	local Parts = {}
+	for Key, Child in pairs(self.Children) do
+		table.insert(Parts, Key ..": ".. tostring(Child))
+	end
+	return "<".. table.concat(Parts, ", \n") ..">"
+end
+
 return Grammar
 

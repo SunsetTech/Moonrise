@@ -26,13 +26,8 @@ end
 ---@param CurrentState Adapt.Execution.State
 ---@param Argument any
 function Jump:Execute(MethodName, CurrentState, Argument) --Root
-	
-	--Where:PushLocation(RootOf)
-	assert(CurrentState.JumpMap[self])
-		local Success, Result = Execution.Recurse(CurrentState, MethodName, CurrentState.JumpMap[self], Argument)
-	--Where:Pop(RootOf)
-	
-	return Success, Result
+	return true, nil, CurrentState.JumpMap[self], Argument
+	--return Execution.Recurse(CurrentState, MethodName, CurrentState.JumpMap[self], Argument)
 end
 
 function Jump:Raise(CurrentState, Argument)

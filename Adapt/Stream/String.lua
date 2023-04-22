@@ -49,9 +49,6 @@ end
 
 ---@param Contents string
 function String:Write(Contents)
-	if (type(Contents) == "boolean") then
-		print(Contents)
-	end
 	assert(type(Contents) == "string")
 	local Prefix = self.Contents:sub(1, self.Position-1)
 	local EndByte = self.Position + #Contents

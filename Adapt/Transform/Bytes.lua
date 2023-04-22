@@ -26,6 +26,7 @@ end
 ---@param CurrentState Adapt.Execution.State
 function Bytes:Raise(CurrentState)
 	local Input = CurrentState:Read(self.Count)
+	--Input = Input == nil and false
 	return Input and #Input == self.Count, Input
 end
 

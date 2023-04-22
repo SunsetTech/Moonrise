@@ -1,3 +1,16 @@
+---@diagnostic disable:empty-block
+unpack=unpack or table.unpack
+require"Moonrise.Import.Install".All()
+
+local CommandLine = require"Moonrise.Tools.CommandLine"
+local Pretty = require"Moonrise.Tools.Pretty"
+local Adapt = require"Moonrise.Adapt"
+local TF = Adapt.Transform
+
+local BasicFilters = require"Moonrise.Grammar.Filters"
+local StringParser = require"Moonrise.Grammar.String"
+
+local Left = require"Moonrise.Adapt.Transform.Left"
 
 local function ComputeStack(Table, Reverse)
 	local ValueIndex, NextIndex = "LHS", "RHS"
@@ -38,9 +51,9 @@ local function LeftToRight(Table)
 	return Head
 end
 
-
 local function RightToLeft(Table)
 	local Stack = ComputeStack(Table)
+	--print(Pretty.Table(Stack,true,2))
 	local Cur = {}
 	local Head = Cur
 	local Prev
@@ -60,81 +73,75 @@ local function RightToLeft(Table)
 			Prev.LHS = Item
 		end
 	end
+	print(Pretty.Table(Head,true,2))
 	return Head
 end
 
-
-unpack=unpack or table.unpack
-require"Moonrise.Import.Install".All()
-
-local Adapt = require"Moonrise.Adapt"
-local TF = Adapt.Transform
-
-Raise = {
-	Expression = function(Recurse, Argument)
-		local Success, Result = Recurse(Argument)
-		if Result then
-			Result = {LHS = Result[1], Op = Result[2], RHS = Result[3]}
+---@type table<string, Adapt.Transform.Filter.Table>
+local Filters = {
+	Swap = {
+		Raise = function (Recurse, Argument)
+			local Success, Result = Recurse(Argument)
+			if Success then
+				return Success, function(LHS)
+					return {
+					}
+				end
+				--[[
+				return Success, {
+					LHS = {
+						LHS = Result.LHS;
+						Op = Result.Op;
+						RHS = Result.RHS.LHS
+					};
+					Op = Result.RHS.Op;
+					RHS = Result.RHS.RHS;
+				}]]
+			end
+			return Success, Result
 		end
-		return Success, Result
-	end;
-	Invert = function(Recurse, Argument)
-		local Success, Result = Recurse(Argument)
-		return Success, Success and RightToLeft(Result)
-	end;
-	RHS = function(Recurse, Argument)
-		local Success, Result = Recurse(Argument)
-		return Success, Result[Result.__which]
-	end;
-}
-
-Lower = {
-	Expression = function(Recurse, Argument)
-		--print(TableToString(Argument))
-		local Arg = { Argument.LHS, Argument.Op, Argument.RHS }
-		return Recurse(Arg)
-	end;
-	Invert = function (Recurse,Argument)
-		return Recurse(LeftToRight(Argument))
-	end;
-	RHS = function(Recurse, Argument)
-		if (type(Argument) == "table") then
-			Argument = {[1]=Argument, __which=1}
-		else
-			Argument = {[2]=Argument, __which=2}
+	};
+	Invert = {
+		Raise = function(Recurse, Argument)
+			local Success, Result = Recurse(Argument)
+			return Success, Success and RightToLeft(Result)
 		end
-		return Recurse(Argument)
-	end;
+	};
+};
+
+PatternB = TF.Grammar{
+	Identifier = StringParser.Create(
+		(TF.Bytes(1) - TF.String"+" - TF.String"\n")^1
+	);
+	Addition = Left(
+		TF.Rule"Addition", TF.Rule"Identifier", 
+		TF.String"+" * TF.Rule"Identifier"
+	);
+	(TF.Rule"Addition" + TF.Rule"Identifier")/BasicFilters.Select;
 }
 
-Pattern = TF.Grammar{--TODO handle not an operation case?
-	Character = TF.Dematch(TF.Bytes(1),TF.String"\n");
-	RHS = TF.Filter(
-		TF.Expect(
-			TF.Select{
-				TF.Jump"Test",
-				TF.Jump"Character"	
-			}
-		),Raise.RHS, Lower.RHS
+PatternA = TF.Grammar{--TODO handle not an operation case?
+	IgnoreSet = TF.String" " + TF.String"\n";
+	IgnoreSetAll = TF.Rule"IgnoreSet"^0;
+	Identifier = StringParser.Create(
+		(
+			TF.Bytes(1) 
+			- (TF.String"+" + TF.Rule"IgnoreSet")
+		)^1
 	);
-	Test = TF.Filter(
-		TF.Sequence{
-			TF.Jump"Character",
-			TF.String"+",
-			TF.Jump"RHS"
-		},
-		Raise.Expression, Lower.Expression
-	);
-	TF.Select{
-		TF.Filter(
-			TF.Jump"Test",
-			Raise.Invert, Lower.Invert
-		),
-		TF.Jump"Character"
-	}
+	RHS = (TF.Rule"Addition" + TF.Rule"Identifier")() /BasicFilters.Select;
+	Addition = (
+		TF.Rule"Identifier" * TF.Rule"IgnoreSetAll" * TF.String"+" * TF.Rule"IgnoreSetAll" * TF.Rule"RHS"
+	) /BasicFilters.NamedSequence{LHS=1,Op=3,RHS=5}/BasicFilters.Debug"Addition.Before-Swap";
+	(TF.Rule"Addition" + TF.Rule"Identifier") /BasicFilters.Select;
 }
+
+local Options = CommandLine.GetOptions.Free()
+local UseB = Options.Settings.pattern_b or Options.Settings.b
+print(UseB)
 local ReadBuffer = Adapt.Stream.File("./Tests/LeftRecurseInput", "rb")
 local WriteBuffer = Adapt.Stream.File("./Tests/Output", "wb")
 
-local Success, Result = Adapt.Process(Pattern, "Raise", ReadBuffer, nil)
-print(Adapt.Process(Pattern, "Lower", WriteBuffer, Result))
+local Success, Result = Adapt.Process(UseB and PatternB or PatternA, "Raise", ReadBuffer, nil)
+print(Pretty.Any(Result, true, 2))
+--print(Adapt.Process(Pattern, "Lower", WriteBuffer, Result))

@@ -15,6 +15,43 @@ function Copy.Table(RHS, Flags, Cache)
 	return LHS
 end
 
+local function ForUpvalues(Function)
+	return coroutine.wrap(
+		function()
+			local Index = 1
+			local Name, Value
+			repeat
+				Name, Value = debug.getupvalue(Function,Index)
+				if Name then
+					coroutine.yield(Index,Name,Value)
+				end
+				Index = Index + 1
+			until Name == nil
+		end
+	)
+end
+
+function Copy.Function(Function,Env,ShareUpvalues)
+	local Dump = string.dump(Function)
+	local _Copy = load(Dump,"Copy","b")
+	if debug.setfenv and Env then
+		debug.setfenv(_Copy, Env)
+	end
+	for Index,Name,Value in ForUpvalues(Function) do
+		local SetName = debug.getupvalue(_Copy,Index)
+		if not debug.setfenv and Env and Name == "_ENV" then
+			debug.setupvalue(_Copy,Index,Env)
+		else
+			if ShareUpvalues then
+				debug.upvaluejoin(_Copy,Index,Function,Index)
+			else
+				debug.setupvalue(_Copy,Index,Value)
+			end
+		end
+	end
+	return _Copy
+end
+
 function Copy.Value(RHS, Flags, Cache)
 	Cache = Cache or {}
 	Flags = Flags or {}
@@ -39,7 +76,7 @@ function Copy.Value(RHS, Flags, Cache)
 				setmetatable(LHS, Definition)
 			end
 		elseif Type == "function" and Flags.Functions then
-			LHS = Function.Copy(RHS, Flags.Functions.Env, Flags.Functions.ShareUpvalues)
+			LHS = Copy.Function(RHS, Flags.Functions.Env, Flags.Functions.ShareUpvalues)
 		else
 			LHS = RHS
 		end

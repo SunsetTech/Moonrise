@@ -29,4 +29,20 @@ return {
 			Lower = NYI;
 		};
 	end;
+	NamedSequence = function(NameMap)
+		---@type Adapt.Transform.Filter.Table
+		local FilterTable = {
+			Raise = function (Recurse, Argument, CurrentState)
+				local Success, Result = Recurse(Argument)
+				local ValueMap = {}
+				if Success then
+					for Name, Index in pairs(NameMap) do
+						ValueMap[Name] = Result[Index]
+					end
+				end
+				return Success, Success and ValueMap
+			end
+		}
+		return FilterTable
+	end;
 }

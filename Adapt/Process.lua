@@ -4,15 +4,14 @@ local Execution = require"Moonrise.Adapt.Execution"
 ---@param MethodName Adapt.MethodName 
 ---@param Buffer Adapt.Stream.Base
 ---@param Argument any
-local Process = function(Node, MethodName, Buffer, Argument, Debug)
+return function(Node, MethodName, Buffer, Argument, Debug, NameMap, JumpMap) --TODO allow reusing state or parts thereof?
 	assert(Node ~= nil)
 	local ProgramState = Execution.State(Buffer, Debug)
+	ProgramState.NameMap = NameMap or ProgramState.NameMap
+	ProgramState.JumpMap = JumpMap or ProgramState.JumpMap
 	ProgramState:Optimize()
 	ProgramState:Link(Node)
 	ProgramState.Mark = ProgramState.Mark
-	print(Node)
 	local Success, Result = Execution.Recurse( ProgramState, MethodName, Node, Argument)
-	return Success, Result
+	return Success, Result, ProgramState.NameMap, ProgramState.JumpMap
 end;
-
-return Process
