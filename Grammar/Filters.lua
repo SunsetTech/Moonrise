@@ -29,7 +29,7 @@ return {
 			Lower = NYI;
 		};
 	end;
-	NamedSequence = function(NameMap)
+	MapSequence = function(NameMap)
 		---@type Adapt.Transform.Filter.Table
 		local FilterTable = {
 			Raise = function (Recurse, Argument, CurrentState)

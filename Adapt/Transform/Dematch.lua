@@ -28,8 +28,6 @@ function Dematch:Recurse(MethodName, CurrentState, Argument)
 	if not WithoutSuccess then
 		CurrentState:Rewind(Bookmark)
 		local Success, Result = Execution.Recurse(CurrentState, MethodName, self.Children.With, Argument)
-		print(self.Children.With)
-		assert(Success ~= nil)
 		return Success, Result
 	end
 	return false

@@ -139,4 +139,8 @@ function Package.Format(String)
 	end
 end
 
+function Package.Indent(What, Amount, Chars)
+	return What:gsub("\n", "\n".. string.rep(Chars, Amount))
+end
+
 return Package

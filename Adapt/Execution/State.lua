@@ -5,13 +5,14 @@ local Tools = {
 }
 local OOP = require"Moonrise.OOP"
 
+---@alias Adapt.Execution.Location string
+
 ---@class Bookmark
 ---@field At integer
 ---@field Variables table
 
 ---@class Adapt.Execution.State
 ---@operator call(): Adapt.Execution.State 
----@field public RootLocation Adapt.Execution.Location
 ---@field public Buffer Adapt.Stream.Base
 ---@field public Debug boolean
 ---@field private Variables table
@@ -33,7 +34,8 @@ function State:Initialize(Instance, Buffer, Debug) --TODO registers
 	
 	Instance.JumpMap = {}
 	Instance.NameMap = {}
-
+	Instance.RaiseCache = {}
+	
 	Instance.Debug = Debug or false
 end
 

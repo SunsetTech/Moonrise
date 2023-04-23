@@ -69,4 +69,8 @@ function All:Raise(CurrentState, Argument)
 	end
 end
 
+function All:__tostring()
+	return tostring(self.Children.Pattern) .."^0"
+end
+
 return All

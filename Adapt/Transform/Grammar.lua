@@ -1,4 +1,4 @@
-
+local String = require"Moonrise.Tools.String"
 local OOP = require"Moonrise.OOP"
 
 local Execution = require"Moonrise.Adapt.Execution"
@@ -29,7 +29,8 @@ function Grammar:__tostring()
 	for Key, Child in pairs(self.Children) do
 		table.insert(Parts, Key ..": ".. tostring(Child))
 	end
-	return "<".. table.concat(Parts, ", \n") ..">"
+	return
+		"Grammar<\n".. String.Indent(table.concat(Parts, ", \n"),1,"  ") .."\n>"
 end
 
 return Grammar

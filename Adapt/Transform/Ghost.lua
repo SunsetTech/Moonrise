@@ -39,5 +39,9 @@ function Ghost:Lower(CurrentState, Argument)
 	return self:Execute("Lower", CurrentState, Argument)
 end
 
+function Ghost:__tostring()
+	return "#".. tostring(self.Children.Pattern)
+end
+
 return Ghost
 

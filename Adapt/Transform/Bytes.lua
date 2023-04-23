@@ -26,8 +26,15 @@ end
 ---@param CurrentState Adapt.Execution.State
 function Bytes:Raise(CurrentState)
 	local Input = CurrentState:Read(self.Count)
+	--[[if Input == nil then
+		return false
+	end]]
 	--Input = Input == nil and false
-	return Input and #Input == self.Count, Input
+	return Input and #Input == self.Count or false, Input
+end
+
+function Bytes:__tostring()
+	return "Bytes(".. self.Count ..")"
 end
 
 return Bytes

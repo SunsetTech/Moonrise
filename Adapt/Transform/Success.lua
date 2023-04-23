@@ -22,5 +22,7 @@ end
 function Success:Raise()
 	return self.Value
 end
-
+function Success:__tostring()
+	return "Success(".. tostring(self.Value) ..")"
+end
 return Success
