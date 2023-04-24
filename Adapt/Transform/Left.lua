@@ -28,6 +28,24 @@ function Left:Initialize(Instance, LHS_R, LHS_NR, RHS, Join) --TODO accept join 
 		)
 end
 
+function Left:EatRHS(CurrentState, Argument)
+		local RHSSuccess = false
+		local RHSLastEnd
+		repeat --Eat RHS until we cant, record the start of the last one
+			local RHSNextEnd = CurrentState:Position()
+			local JoinSuccess = Execution.Recurse(CurrentState, "Raise", self.Children.Join, nil)
+			if JoinSuccess then
+				RHSSuccess = Execution.Recurse(CurrentState, "Raise", self.Children.RHS, nil)
+				if RHSSuccess then
+					RHSLastEnd = RHSNextEnd
+				end
+			else
+				break
+			end
+		until not RHSSuccess
+	return RHSLastEnd
+end
+
 --doesnt work right oops
 ---comment
 ---@param CurrentState Adapt.Execution.State
@@ -40,15 +58,7 @@ function Left:Raise(CurrentState, Argument) --Root
 	local FrontSuccess = Execution.Recurse(CurrentState, "Raise", self.Children.LHS_NR, nil)
 	
 	if FrontSuccess then
-		local RHSSuccess = false
-		local RHSLastEnd
-		repeat --Eat RHS until we cant, record the start of the last one
-			local RHSNextEnd = CurrentState:Position()
-			RHSSuccess = Execution.Recurse(CurrentState, "Raise", self.Children.RHS, nil)
-			if RHSSuccess then
-				RHSLastEnd = RHSNextEnd
-			end
-		until not RHSSuccess
+		local RHSLastEnd = self:EatRHS(CurrentState, Argument)
 		
 		if RHSLastEnd then --Found atleast one RHS, recurse
 			CurrentState:Rewind(FrontMark)
@@ -61,8 +71,11 @@ function Left:Raise(CurrentState, Argument) --Root
 			CurrentState.Buffer = CurrentBuffer
 			
 			if LeftSuccess then
-				local RightSuccess, RightResult = Execution.Recurse(CurrentState, "Raise", self.Children.RHS, Argument.RHS)
-				return RightSuccess, RightSuccess and {LHS = LeftResult, RHS = RightResult}
+				local JoinSuccess, JoinResult = Execution.Recurse(CurrentState, "Raise", self.Children.Join, Argument.Join)
+				if JoinSuccess then
+					local RightSuccess, RightResult = Execution.Recurse(CurrentState, "Raise", self.Children.RHS, Argument.RHS)
+					return RightSuccess, RightSuccess and {LeftResult, JoinResult, RightResult}
+				end
 			end
 		else --No RHS found, try the non recursive case
 			print"???"

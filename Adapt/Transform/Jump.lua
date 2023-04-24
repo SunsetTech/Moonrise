@@ -26,8 +26,8 @@ end
 ---@param CurrentState Adapt.Execution.State
 ---@param Argument any
 function Jump:Execute(MethodName, CurrentState, Argument) --Root
-	return true, nil, CurrentState.JumpMap[self], Argument
-	--return Execution.Recurse(CurrentState, MethodName, CurrentState.JumpMap[self], Argument)
+	--return true, nil, CurrentState.JumpMap[self], Argument
+	return Execution.Recurse(CurrentState, MethodName, CurrentState.JumpMap[self], Argument)
 end
 
 function Jump:Raise(CurrentState, Argument)

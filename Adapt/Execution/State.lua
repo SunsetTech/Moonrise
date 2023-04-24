@@ -25,7 +25,7 @@ local State = OOP.Declarator.Shortcuts"Moonrise.Adapt.Execution.State"
 
 ---@param Instance Adapt.Execution.State
 ---@param Buffer Adapt.Stream.Base
-function State:Initialize(Instance, Buffer, Debug) --TODO registers
+function State:Initialize(Instance, Buffer, Debug, IgnoreDebug) --TODO registers
 	Instance.Buffer = Buffer
 	
 	Instance.Variables = {}
@@ -35,7 +35,8 @@ function State:Initialize(Instance, Buffer, Debug) --TODO registers
 	Instance.JumpMap = {}
 	Instance.NameMap = {}
 	Instance.RaiseCache = {}
-	
+	Instance.IgnoreDebug = IgnoreDebug or {}
+
 	Instance.Debug = Debug or false
 end
 

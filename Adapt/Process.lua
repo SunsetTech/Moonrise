@@ -4,9 +4,9 @@ local Execution = require"Moonrise.Adapt.Execution"
 ---@param MethodName Adapt.MethodName 
 ---@param Buffer Adapt.Stream.Base
 ---@param Argument any
-return function(Node, MethodName, Buffer, Argument, Debug, NameMap, JumpMap) --TODO allow reusing state or parts thereof?
+return function(Node, MethodName, Buffer, Argument, Debug, NameMap, JumpMap, IgnoreDebug) --TODO allow reusing state or parts thereof?
 	assert(Node ~= nil)
-	local ProgramState = Execution.State(Buffer, Debug)
+	local ProgramState = Execution.State(Buffer, Debug, IgnoreDebug)
 	ProgramState.NameMap = NameMap or ProgramState.NameMap
 	ProgramState.JumpMap = JumpMap or ProgramState.JumpMap
 	ProgramState:Optimize()

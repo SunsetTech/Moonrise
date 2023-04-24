@@ -77,7 +77,7 @@ local function LeftToRight(Table)
 	return Head
 end
 
---[[
+
 ---@type table<string, Adapt.Transform.Filter.Table>
 local Filters = {
 	Invert = {
@@ -86,17 +86,93 @@ local Filters = {
 			return Success, Success and RightToLeft(Result)
 		end
 	};
-};]]
+	ToNumber = {
+		Raise = function(Recurse, Argument)
+			local Success, Result = Recurse(Argument)
+			return Success, Success and tonumber(Result)
+		end;
+	};
+	Unary = {
+		Raise = function (Recurse, Argument, CurrentState)
+			local Success, Result = Recurse(Argument)
+			return Success, Success and -Result[2]
+		end
+	};
+	SubExpression = {
+		Raise = function (Recurse, Argument, CurrentState)
+			local Success, Result = Recurse(Argument)
+			return Success, Success and Result[2]
+		end
+	};
+	MulDiv = {
+		Raise = function (Recurse, Argument, CurrentState)
+			local Success, Result = Recurse(Argument)
+			if Success then
+				print(Result)
+				if Result[2] == "*" then
+					return true, Result[1] * Result[3]
+				else
+					return true, Result[1] / Result[3]
+				end
+			end
+			return false
+		end
+	};
+	AddSub = {
+		Raise = function (Recurse, Argument, CurrentState)
+			local Success, Result = Recurse(Argument)
+			if Success then
+				if Result[2] == "+" then
+					return true, Result[1] + Result[3]
+				else
+					return true, Result[1] - Result[3]
+				end
+			end
+			return false
+		end
+	};
+}
+
+local function LeftOp(RuleName, OperatorPattern, OperandPattern)
+	return Left(TF.Rule(RuleName), OperandPattern, OperandPattern, OperatorPattern)
+end
 
 PatternB = TF.Grammar{
 	Identifier = StringParser.Create(
-		(TF.Bytes(1) - TF.String"+" - TF.String"\n")^1
+		(TF.Range("0","9"))^1
+	) /Filters.ToNumber;
+
+	SubExpression = (TF.String"(" * TF.Rule"Expression" * TF.String")") /Filters.SubExpression;
+	Unary = TF.Grammar{
+		Operand = (TF.Rule"SubExpression" + TF.Rule"Identifier")/BasicFilters.Select;
+		(TF.Set"-" * TF.Rule"Operand");
+	};
+
+	MulDiv = LeftOp(
+		"MulDiv", TF.Set"*/", (
+			TF.Rule"Unary" 
+			+ TF.Rule"Identifier"
+			+ TF.Rule"SubExpression"
+		)/BasicFilters.Select
 	);
-	Addition = Left(
-		TF.Rule"Addition", TF.Rule"Identifier", 
-		TF.String"+" * TF.Rule"Identifier"
+	
+	AddSub = LeftOp(
+		"AddSub", TF.Set"+-", (
+			TF.Rule"SubExpression"
+			+ TF.Rule"MulDiv" 
+			+ TF.Rule"Unary"
+			+ TF.Rule"Identifier"
+		)/BasicFilters.Select
 	);
-	(TF.Rule"Addition" + TF.Rule"Identifier")/BasicFilters.Select;
+	
+	Expression = (
+		  TF.Rule"AddSub" 
+		+ TF.Rule"MulDiv" 
+		+ TF.Rule"SubExpression" 
+		+ TF.Rule"Unary" 
+		+ TF.Rule"Identifier"
+	)/BasicFilters.Select;
+	TF.Rule"Expression";
 }
 
 PatternA = TF.Grammar{
@@ -128,7 +204,7 @@ print(UseB)
 local ReadBuffer = Adapt.Stream.File("./Tests/LeftRecurseInput", "rb")
 local WriteBuffer = Adapt.Stream.File("./Tests/Output", "wb")
 
-local Success, Result = Adapt.Process(UseB and PatternB or PatternA, "Raise", ReadBuffer, nil)
+local Success, Result = Adapt.Process(UseB and PatternB or PatternA, "Raise", ReadBuffer, nil, Options.Settings.debug or Options.Settings.d)
 print(Pretty.Any(Result, true, 2))
 --print(Pretty.Any(RightToLeft(Result),true,2))
 --print(Adapt.Process(Pattern, "Lower", WriteBuffer, Result))
