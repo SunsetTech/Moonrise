@@ -35,6 +35,7 @@ function All:Lower(CurrentState, Arguments)
 			if Success then
 				table.insert(Results, Result)
 			else
+				print(Argument, Argument[Index], self.Children.Pattern)
 				error"oh no"
 			end
 		end
@@ -51,9 +52,6 @@ function All:Raise(CurrentState, Argument)
 		local Success, Bookmark
 		local Results = Execution.Bubble.Form()
 		repeat
-			if Bookmark then 
-				CurrentState:ClearMark(Bookmark)
-			end
 			Bookmark = CurrentState:Mark()
 			local Result
 			Success, Result = Execution.Recurse(

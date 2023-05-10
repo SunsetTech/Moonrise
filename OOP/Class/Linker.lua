@@ -25,14 +25,23 @@ return Module.Sister"Factory"(
 				return Destination
 			end;
 			
-			__instantiate = function(self)
+			__instantiate = function(self, Target, Initializer)
+				local Instance = Create(self)
+				rawset(Instance, "Target", Target)
+				rawset(Instance, "Generators", Initializer or {})
+				return Instance
+			end;
+			
+			--[[__instantiate = function(self, Instance, Target, Initializer)
+				print(Instance, Target, Initializer)
 				return Create(self)
+
 			end;
 			
 			__initialize = function(self, Instance, Target, Initializer)
 				rawset(Instance, "Target", Target)
 				rawset(Instance, "Generators", Initializer or {})
-			end;
+			end;]]
 		}
 	)
 )

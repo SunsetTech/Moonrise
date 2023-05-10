@@ -7,6 +7,7 @@ local Range = OOP.Declarator.Shortcuts(
 )
 
 function Range:Initialize(Instance, Start, End)
+	assert(Start and End)
 	Instance.Start = type(Start) == "string" and string.byte(Start) or Start
 	Instance.End = type(End) == "string" and string.byte(End) or End
 end

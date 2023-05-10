@@ -16,7 +16,7 @@ return Factory(
 		{
 			__instantiate = function(self, Name, Inherits, Static, Dynamic, Link)
 				Inherits = Inherits or {Root}
-				Tools.Error.CallerAssert(type(Inherits) == "table" and #Inherits > 0, "Must have a base class")
+				--Tools.Error.CallerAssert(type(Inherits) == "table" and #Inherits > 0, "Must have a base class")
 				
 				local Obj = Create(
 					self,

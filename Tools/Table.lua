@@ -47,7 +47,10 @@ function Table.CachedCopy(Cache,Value,IncludeMetatable)
 	return Cache[Value]
 end
 
+
+
 function Table.Copy(Source,IncludeMetatable,Cache,Target)
+	--print_caller_info()
 	IncludeMetatable = IncludeMetatable or true
 	Cache = Cache or {}
 	Target = Target or {}

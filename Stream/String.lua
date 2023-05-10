@@ -2,13 +2,13 @@
 local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
----@class Adapt.Stream.String : Adapt.Stream.Base
----@operator call:Adapt.Stream.String
+---@class Moonrise.Stream.String : Moonrise.Stream.Base
+---@operator call:Moonrise.Stream.String
 ---@field public Contents string
 ---@field private Position integer
 local String = OOP.Declarator.Shortcuts(
-	"Adapt.Stream.String", {
-		Module.Sister"Base"
+	"Moonrise.Stream.String", {
+		require"Moonrise.Stream.Base"
 	}
 )
 

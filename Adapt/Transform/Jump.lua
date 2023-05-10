@@ -27,15 +27,20 @@ end
 ---@param Argument any
 function Jump:Execute(MethodName, CurrentState, Argument) --Root
 	--return true, nil, CurrentState.JumpMap[self], Argument
-	return Execution.Recurse(CurrentState, MethodName, CurrentState.JumpMap[self], Argument)
+	local Success, Result = Execution.Recurse(CurrentState, MethodName, CurrentState.JumpMap[self], Argument)
+	--return Success, Result
+	return Success, Result
 end
 
 function Jump:Raise(CurrentState, Argument)
-	return self:Execute("Raise", CurrentState, Argument)
+	--TODO eliminate recursion here
+	local Success, Result = self:Execute("Raise", CurrentState, Argument)
+	return Success, Result
 end
 
 function Jump:Lower(CurrentState, Argument) --Root
-	return self:Execute("Lower", CurrentState, Argument)
+	--return self:Execute("Lower", CurrentState, Argument)
+	return true, nil, CurrentState.JumpMap[self], Argument
 end
 
 function Jump:Optimize()

@@ -1,15 +1,16 @@
-local MutableBuffer = require"MutableBuffer"
+local Available, MutableBuffer = pcall(require,"MutableBuffer")
+if not Available then return end
 
 local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
----@class Adapt.Stream.Buffer : Adapt.Stream.Base
----@operator call:Adapt.Stream.Buffer
+---@class Moonrise.Stream.Buffer : Moonrise.Stream.Base
+---@operator call:Moonrise.Stream.Buffer
 ---@field public Contents string
 ---@field private Position integer
 local Buffer = OOP.Declarator.Shortcuts(
-	"Adapt.Stream.Buffer", {
-		Module.Sister"Base"
+	"Moonrise.Stream.Buffer", {
+		require"Moonrise.Stream.Base"
 	}
 )
 

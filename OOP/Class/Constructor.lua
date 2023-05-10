@@ -4,8 +4,9 @@ local Create = require"Moonrise.OOP.Create"
 
 --- @vararg any
 --- @return table, string
-local function __instantiate(self, ...)
-	return Create(self)
+local function __instantiate(self, ...) --Unused?
+	local Instance, ID = Create(self)
+	return Instance, ID
 end
 
 --- @param Instance table
@@ -16,9 +17,12 @@ end
 --- @vararg any
 --- @return table
 local function __new(self, ...)
-	local Instance = self:__instantiate(...)
-	self:__initialize(Instance, ...) --not JIT optimizable?
-	return Instance
+	--local Instance = self:__instantiate(...)
+	--self.__initialize(self, Instance, ...) --not JIT optimizable?
+	--return Instance
+	--local New = self:__instantiate(...)
+	--return New
+	return self:__instantiate(...)
 end
 
 return Derive(

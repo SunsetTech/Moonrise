@@ -11,6 +11,11 @@ local OOP = require"Moonrise.OOP"
 ---@field At integer
 ---@field Variables table
 
+---@class Adapt.Execution.State.Memo
+---@field Next integer?
+---@field Result any
+---@field Success boolean?
+
 ---@class Adapt.Execution.State
 ---@operator call(): Adapt.Execution.State 
 ---@field public Buffer Adapt.Stream.Base
@@ -18,7 +23,8 @@ local OOP = require"Moonrise.OOP"
 ---@field private Variables table
 ---@field private IsInVariableNames table
 ---@field private VariableNames string[]
----@field public RaiseCache table
+---@field public MemoTable table<Adapt.Transform.Base, table<integer,Adapt.Execution.State.Memo>>
+---@field public IgnoreDebug table<Adapt.Transform.Base, boolean>
 ---@field public NameMap table
 ---@field public JumpMap table
 local State = OOP.Declarator.Shortcuts"Moonrise.Adapt.Execution.State"
@@ -34,7 +40,7 @@ function State:Initialize(Instance, Buffer, Debug, IgnoreDebug) --TODO registers
 	
 	Instance.JumpMap = {}
 	Instance.NameMap = {}
-	Instance.RaiseCache = {}
+	Instance.MemoTable = {}
 	Instance.IgnoreDebug = IgnoreDebug or {}
 
 	Instance.Debug = Debug or false
@@ -67,6 +73,24 @@ local function BackwardSearch(Stack, SubPath)
 	end
 end
 
+function State:GetMemoEntry(NodeName)
+	self.MemoTable[NodeName] = self.MemoTable[NodeName] or {}
+	local LeftRecursive = false
+	if self.MemoTable[NodeName][self:Position()] and self.MemoTable[NodeName][self:Position()].Success == nil then
+		LeftRecursive = true
+	end
+	self.MemoTable[NodeName][self:Position()] = self.MemoTable[NodeName][self:Position()] or {
+		Result = nil;
+		Success = nil;
+		Next = nil;
+	}
+	return self.MemoTable[NodeName][self:Position()], LeftRecursive
+end
+
+function State:Goto(Position)
+	return self.Buffer:Goto(Position)
+end
+
 function State:Link(Node, At, Stack)
 	Stack = Stack or {Node}
 	At = At or {"Root"}
@@ -95,7 +119,7 @@ function State:Link(Node, At, Stack)
 end
 
 ---comment
----@param Key string
+---@param Key Moonrise.Object.UniqueKey
 ---@param Value any
 function State:SetVariable(Key, Value)
 	if not self.IsInVariableNames[Key] then
@@ -106,7 +130,7 @@ function State:SetVariable(Key, Value)
 end
 
 ---comment
----@param Key string
+---@param Key Moonrise.Object.UniqueKey
 ---@return any
 function State:GetVariable(Key)
 	return self.Variables[Key]
@@ -191,6 +215,7 @@ function State:Optimize()
 	self.RestoreVariables = State.RestoreVariables
 	self.ClearMark = State.ClearMark
 	self.Link = State.Link
+	self.Buffer:Optimize()
 end
 
 return State

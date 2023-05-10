@@ -1,12 +1,12 @@
 local Module = require"Moonrise.Import.Module"
 local OOP = require"Moonrise.OOP"
 
----@class Adapt.Stream.File : Adapt.Stream.Base
----@operator call:Adapt.Stream.File
+---@class Moonrise.Stream.File : Moonrise.Stream.Base
+---@operator call:Moonrise.Stream.File
 ---@field Handle file*
 local File = OOP.Declarator.Shortcuts(
-	"Adapt.Stream.File", {
-		Module.Sister"Base"
+	"Moonrise.Stream.File", {
+		require"Moonrise.Stream.Base"
 	}
 )
 
@@ -50,7 +50,7 @@ end
 ---@param Bytes integer
 ---@return string
 function File:Read(Bytes)
-	return self.Handle:read(Bytes)
+	return self.Handle:read(Bytes) or ""
 end
 
 ---@param Contents string

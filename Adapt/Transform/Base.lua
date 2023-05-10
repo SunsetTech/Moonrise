@@ -5,6 +5,7 @@ local OOP = require"Moonrise.OOP"
 local Base = OOP.Declarator.Shortcuts"Adapt.Transform.Base"
 
 function Base:Initialize()
+	self.Sides = {}
 	self:Optimize()
 end
 
@@ -114,6 +115,12 @@ end
 function Base:__unm()
 	local Not = require"Moonrise.Adapt.Transform.Not"
 	return Not(self)
+end
+
+function Base:__len()
+	error"???"
+	local Ghost = require"Moonrise.Adapt.Transform.Ghost"
+	return Ghost(self)
 end
 
 function Base:__call()

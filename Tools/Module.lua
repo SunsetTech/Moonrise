@@ -14,7 +14,9 @@ end
 
 function Package.FindLoader(ModuleName)
 	local Messages = {}
-	for _,Searcher in pairs(package.searchers or package.loaders) do
+	--for _,Searcher in pairs(package.searchers or package.loaders) do
+	for Index = 1, #(package.searchers or package.loaders) do
+		local Searcher = (package.searchers or package.loaders)[Index]
 		local Loader,Path = Searcher(ModuleName)
 		if (type(Loader) == "function") then
 			return Loader,Path

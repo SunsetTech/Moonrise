@@ -13,7 +13,8 @@ return Create(
 		},
 		{
 			__instantiate = function(self, Definition)
-				return Create(self, Definition)
+				local Instance, ID = Create(self, Definition)
+				return Instance, ID
 			end;
 		}
 	)

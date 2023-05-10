@@ -16,15 +16,19 @@ function Expect:Initialize(Instance, Pattern)
 end
 
 ---@param CurrentState Adapt.Execution.State
-function Expect:FormatError(CurrentState)
-	return ("Failed at %s(%s)"):format(CurrentState.NameMap[self.Children.Pattern], self.Children.Pattern)
+function Expect:FormatError(CurrentState, Where)
+	return ("Failed at %s(%s) <%s..>"):format(CurrentState.NameMap[self.Children.Pattern], self.Children.Pattern, Where or "?")
 end
 
 ---@param CurrentState Adapt.Execution.State
 ---@param Argument any
 function Expect:Raise(CurrentState, Argument) --Root
+	local Bookmark = CurrentState:Mark()
 	local Success, Result = Execution.Recurse(CurrentState, "Raise", self.Children.Pattern, Argument)
-	assert(Success, self:FormatError(CurrentState))
+	if not Success then
+		CurrentState:Rewind(Bookmark)
+		assert(Success, self:FormatError(CurrentState, CurrentState:Peek(32)))
+	end
 	return Success, Result
 end
 
@@ -34,6 +38,10 @@ function Expect:Lower(CurrentState, Argument)
 	local Success, Result = Execution.Recurse(CurrentState, "Lower", self.Children.Pattern, Argument)
 	assert(Success, self:FormatError(CurrentState))
 	return Success, Result
+end
+
+function Expect:__tostring()
+	return "!".. tostring(self.Children.Pattern) .."!"
 end
 
 return Expect

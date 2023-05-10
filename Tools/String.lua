@@ -1,5 +1,5 @@
 local l = require"lpeg"
-
+local Debug = require"Moonrise.Tools.Debug"
 local Package = {}
 
 local function findNextDivider(String, Divider, Position)
@@ -22,7 +22,7 @@ function Package.Explode(String, Divider) -- credit: http://richard.warburton.it
 
     -- for each divider found
     while true do
-        local StartPos, EndPos = findNextDivider(String, Divider, Position)
+        local StartPos, EndPos = string.find(String, Divider, Position, true)
         if StartPos == nil then break end
 
         table.insert(Results, string.sub(String, Position, StartPos - 1)) -- Attach chars left of current divider
@@ -134,9 +134,9 @@ function Package.Unescape(String)
 end
 
 function Package.Format(String)
-	return function(...)
+	local F = function(...)
 		return String:format(...)
-	end
+	end; return F;
 end
 
 function Package.Indent(What, Amount, Chars)

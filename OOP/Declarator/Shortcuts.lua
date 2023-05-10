@@ -2,6 +2,8 @@ local Module = require"Moonrise.Import.Module"
 local Error = require"Moonrise.Tools.Error"
 local Derive = require"Moonrise.OOP.Derive"
 
+local Count = {}
+
 ---@class OOP.Declarator.Shortcuts
 local Shortcuts = Module.Relative"Class.Factory"(
 	Derive(
@@ -29,6 +31,9 @@ local Shortcuts = Module.Relative"Class.Factory"(
 				elseif Key:sub(1,2) == "__" then
 					Error.CallerError"Definition member not found"
 				else
+					--[[Count[Type.__type] = Count[Type.__type] or {}
+					Count[Type.__type][Key] = (Count[Type.__type][Key] or 0) + 1
+					print("Shortcuts", Type.__type, Key, Count[Type.__type][Key])]]
 					return Type.__members[Key]
 				end
 			end;

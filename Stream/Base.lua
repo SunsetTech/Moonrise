@@ -1,7 +1,11 @@
 local OOP = require"Moonrise.OOP"
----@class Adapt.Stream.Base
----@operator call(): Adapt.Stream.Base
-local Base = OOP.Declarator.Shortcuts"Adapt.Stream.Base"
+---@class Moonrise.Stream.Base
+---@operator call(): Moonrise.Stream.Base
+local Base = OOP.Declarator.Shortcuts(
+	"Moonrise.Stream.Base", {
+		require"Moonrise.Object.Optimizable"
+	}
+)
 
 ---@diagnostic disable-next-line:unused-local
 function Base:Initialize(Instance)

@@ -18,15 +18,18 @@ function Set:Initialize(Instance, Chars)
 end
 
 function Set:Lower(ExecutionState, Input)
-	assert(#Input == 1)
-	local Matches = self.Chars[Input]
-	return Matches, Matches and ExecutionState:Write(Input)
+	if (type(Input) == "string") then
+		local Matches = self.Chars[Input]
+		return Matches, Matches and ExecutionState:Write(Input)
+	else
+		return false
+	end
 end
 
 function Set:Raise(ExecutionState)
 	local Input = ExecutionState:Read(1)
 	local Matches = self.Chars[Input]
-	return Matches, Input
+	return Matches == true, Input
 end
 
 function Set:__tostring()

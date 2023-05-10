@@ -1,5 +1,5 @@
 local OOP = require"Moonrise.OOP"
-
+local Pretty = require"Moonrise.Tools.Pretty"
 local Execution = require"Moonrise.Adapt.Execution"
 
 ---@class Adapt.Transform.Sequence : Adapt.Transform.Compound
@@ -9,27 +9,38 @@ local Sequence = OOP.Declarator.Shortcuts(
 	}
 )
 
-function Sequence:ExecuteChildren(ExecutionState, MethodName, Arguments)
-	local Results = {}
-	
-	for Index = 1, #self.Children do
-		local Child = self.Children[Index]
-		local Argument = Arguments[Index]
-		
-		local Success, Result = Execution.Recurse(
-			ExecutionState, 
-			MethodName, Child, 
-			Argument
-		)
-		
-		if Success then
-			Results[Index] = Result
-		else
-			return false
-		end
+function Sequence:GetType()
+	local TypeInfo = {
+		Type = "table";
+		Elements = {};
+	}
+	for _, Child in pairs(self.Children) do
+		table.insert(TypeInfo.Elements, Child:GetType())
 	end
-	
-	return true, Results
+
+	return TypeInfo
+end
+
+function Sequence:ExecuteChildren(ExecutionState, MethodName, Arguments)
+	--assert(type(Arguments) == "table")
+		local Results = {}
+		for Index = 1, #self.Children do
+			local Child = self.Children[Index]
+			local Argument = Arguments[Index]
+			local Success, Result = Execution.Recurse(
+				ExecutionState, 
+				MethodName, Child, 
+				Argument
+			)
+			
+			if Success then
+				Results[Index] = Result
+			else
+				return false
+			end
+		end
+		
+		return true, Results
 end
 
 function Sequence:Raise(ExecutionState, Arguments)

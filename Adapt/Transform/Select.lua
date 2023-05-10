@@ -54,7 +54,9 @@ function Select:TryChildren(CurrentState, MethodName, ArgumentMap)
 			return false
 		end
 	else --gotta try 'em all, Parsemon
-		for Index,Child in pairs(self.Children) do
+		--for Index,Child in pairs(self.Children) do
+		for Index = 1, #self.Children do
+			local Child = self.Children[Index]
 			local Argument = ArgumentMap[Index]
 			local Success, Result = TryChild(CurrentState, MethodName, Index, Child, Argument, Bookmark)
 			if Success then

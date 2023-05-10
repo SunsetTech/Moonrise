@@ -14,6 +14,7 @@ local function __implements(self, Type)
 			or nil
 		)
 	
+	--print(self, ArgType, SelfID, Type)
 	if SelfID == Type then 
 		return true
 	else
@@ -39,7 +40,7 @@ return Derive(
 	nil,
 	{
 		__implements = __implements,
-		__typeof = __typeof
+		--__typeof = __typeof
 	}
 )
 

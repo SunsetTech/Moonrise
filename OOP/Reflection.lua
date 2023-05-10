@@ -7,8 +7,9 @@ local Reflection; Reflection = {
 		
 		Of = function(Class, Object)
 			local Meta = getmetatable(Object)
-			if Meta and Meta.__typeof then
-				return Meta:__typeof(Class)
+			--print(Meta, Class)
+			if Meta and Meta.__implements then
+				return Meta:__implements(Class)
 			else
 				return false
 			end

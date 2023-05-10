@@ -51,10 +51,11 @@ local Error; Error = {
 		
 		Wrap = function(Function, At)
 			return function(...)
-				return Error.Here.Test(
+				--[[return Error.Here.Test(
 					Error.Here.Location(At),
 					pcall(Function, ...)
-				)
+				)]]
+				return Function(...)
 			end
 		end;
 		
@@ -78,7 +79,8 @@ Error.NotImplemented = Error.Caller.Unimplemented
 Error.Rethrow = Error.Caller.Rethrow
 
 function Error.NotMine(Function, ...)
-	return Error.Caller.Wrap(Function)(...)
+	return Function(...)
+	--return Error.Caller.Wrap(Function)(...)
 end
 
 return Error

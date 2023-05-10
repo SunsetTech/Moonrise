@@ -1,5 +1,5 @@
 local Process = require"Moonrise.Adapt.Process"
-local StringStream = require"Moonrise.Adapt.Stream.String"
+local StringStream = require"Moonrise.Stream.String"
 local Grammar = require"Moonrise.Grammar.CommandLine"
 
 local function SetValue(In, Key, Value)

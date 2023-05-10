@@ -25,7 +25,8 @@ function Atleast:Lower(CurrentState, Arguments)
 		local Results = Execution.Bubble.Form()
 		
 		local Success
-		for _, Argument in pairs(Arguments) do
+		for Index = 1, #Arguments do
+			local Argument = Arguments[Index]
 			local Result
 			Success, Result = Execution.Recurse(
 				CurrentState,

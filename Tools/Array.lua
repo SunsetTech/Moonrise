@@ -64,8 +64,8 @@ end
 
 ---comment
 ---@param Source any[]
----@param From integer
----@param To integer
+---@param From integer?
+---@param To integer?
 ---@return any[]
 function Array.Slice(Source,From,To)
 	From = From or 1

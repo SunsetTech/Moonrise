@@ -10,15 +10,15 @@ end
 
 function Test.Passes(Name, Method)
 	return function(...)
-		local Passed, Data = Method(...)
-		return Test.Results("+".. Name, Passed, Data)
+		local NoError, Passed, Data = pcall(Method, ...)
+		return Test.Results("+".. Name, NoError and Passed, Data)
 	end
 end
 
 function Test.Fails(Name, Method)
 	return function(...)
-		local Passed, Data = Method(...)
-		return Test.Results("~".. Name, not Passed, Data)
+		local NoError, Passed, Data = pcall(Method, ...)
+		return Test.Results("~".. Name, not (Passed or NoError), Data)
 	end
 end
 

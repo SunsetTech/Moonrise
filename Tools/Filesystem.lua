@@ -97,7 +97,6 @@ function Package.Recurse(BaseName,FilterSpecial,FilterHidden,BaseSubName)
 end
 
 function Package.Copy(From,To,Dry)
-	DebugSink:Add("Copying %s to %s",From,To)
 	if not Dry then
 		local FromFile = io.open(From,"r")
 		local ToFile = io.open(To,"w")
@@ -108,7 +107,6 @@ function Package.Copy(From,To,Dry)
 end
 
 function Package.Write(Name,Contents,Dry)
-	DebugSink:Add("Writing to %s", Name)
 	if not Dry then
 		Mode = Mode or "w+"
 		local File = io.open(Name,Mode)
@@ -119,32 +117,26 @@ end
 
 local function Execute(String,...)
 	String = String:format(...)
-	DebugSink:Add("Executing: %s",String)
 	return os.execute(String)
 end
 
 function Package.CreateDirectory(Name,Dry)
-	DebugSink:Add("Creating directory %s", Name)
 	if not Dry then
 		Execute([[mkdir -p "%s"]],Name)
 	end
 end
 
 function Package.ChangePath(Root,Function,...)
-	DebugSink:Add("Changing to %s", Root)
-	DebugSink:Push()
 		local Current = lfs.currentdir()
 		lfs.chdir(Root)
 		local Returns = {Function(...)}
 		lfs.chdir(Current)
-	DebugSink:Pop()
 	return table.unpack(Returns)
 end
 
 
 function Package.Delete(Name,Dry)
 	if Package.Exists(Name) then
-		DebugSink:Add("Deleting %s", Name)
 		if not Dry then
 			return Execute([[rm -rf "%s"]],Name)
 		end
@@ -152,7 +144,6 @@ function Package.Delete(Name,Dry)
 end
 
 function Package.SymbolicLink(Name,Target,Absolute,Dry)
-	DebugSink:Add("Linking %s to %s",Name,Target)
 	if not Dry then
 		Absolute = Absolute or true
 		if Absolute then 
